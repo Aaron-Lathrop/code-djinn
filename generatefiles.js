@@ -1,6 +1,11 @@
 function generatefiles(fs, process, __dirname, methods) {
     const { getProcessVars, getConfig, getTemplateVars, replaceTemplateVars, createDirectories } = methods;
 
+    if (!getProcessVars || !getConfig || !getTemplateVars || !replaceTemplateVars || !createDirectories)
+        throw Error(
+            `All required method implementations not provided. The following are all required: getProcessVars, getConfig, getTemplateVars, replaceTemplateVars, createDirectories`
+        );
+        
     // Get Directories from Template
     const files = fs.readdirSync('./templates', { withFileTypes: true });
     const getDirectories = source => source.filter(dirnet => dirnet.isDirectory())
