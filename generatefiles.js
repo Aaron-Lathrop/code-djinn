@@ -29,7 +29,7 @@ function generatefiles() {
 
                 const templateVars = getTemplateVars(config, fileTemplate);
                 const updatedFile = replaceTemplateVars(fileTemplate, templateVars);
-                const directoriesCreated = createDirectories(fs, directories);
+                const directoriesCreated = createDirectories(directories);
 
                 if (directoriesCreated) {
                     // Write all files to disk or have a dryRun to make sure things are configured correctly

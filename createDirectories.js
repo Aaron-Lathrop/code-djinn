@@ -1,4 +1,6 @@
-function createDirectories(fs, templateDirectories) {
+const fs = require('fs');
+
+function createDirectories(templateDirectories) {
     if (!fs.existsSync('./temp'))
         fs.mkdirSync('./temp');
 
