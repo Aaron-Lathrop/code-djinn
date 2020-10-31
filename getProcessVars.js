@@ -1,4 +1,4 @@
-function getProcessVars(process) {
+function getProcessVars() {
     // Convert args from CLI call to a javaScript object
     const processVariables = {};
     const processArgs = process.argv && process.argv.slice(2) || [];

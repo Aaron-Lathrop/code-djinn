@@ -9,8 +9,10 @@ function createDirectories(fs, templateDirectories) {
                 console.log(`Created directory './temp/${dir}'`);
             }
         });
+        return true;
     } catch (err) {
         console.error(err);
+        return false;
     }
 }
 exports.createDirectories = createDirectories;
