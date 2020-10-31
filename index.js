@@ -1,7 +1,13 @@
 const fs = require('fs');
-const path = require('path');
+const { createDirectories } = require("./createDirectories");
+const { getConfig } = require("./getConfig");
+const { getProcessVars } = require("./getProcessVars");
+const { getTemplateVars } = require("./getTemplateVars");
+const { replaceTemplateVars } = require("./replaceTemplateVars");
 
-function main() {
+generatefiles(fs, process, __dirname);
+
+function generatefiles(fs, process, __dirname) {
     // Get Directories from Template
     const files = fs.readdirSync('./templates', { withFileTypes: true });
     const getDirectories = source => source.filter(dirnet => dirnet.isDirectory())
@@ -27,7 +33,7 @@ function main() {
                 const updatedFile = replaceTemplateVars(fileTemplate, templateVars);
         
                 // Create path to write files to if it doesn't exist
-                createDirectories(directories);
+                createDirectories(fs, directories);
 
                 // Write all files to disk or have a dryRun to make sure things are configured correctly
                 const destinationPath = __dirname + `/temp/${config.route}${scriptType}.js`;
@@ -46,57 +52,4 @@ function main() {
             }
         });
     })
-}
-main();
-
-function getProcessVars(process) {
-    // Convert args from CLI call to a javaScript object
-    const processVariables = {};
-    const processArgs = process.argv.slice(2);
-    processArgs.forEach((val) => {
-        const keyValue = val.split('=');
-        const key = keyValue[0];
-        const value = keyValue[1];
-        processVariables[key] = value;
-    });
-    return processVariables;
-}
-
-function getConfig(processVariables) {
-    const configs = require(__dirname + `/${processVariables.config}`) || [];
-    return configs;
-}
-
-function getTemplateVars(config, fileTemplate) {
-    const templateVarRegex = new RegExp(/({{\w*}})/g);
-    const templateVarsMatches = fileTemplate.match(templateVarRegex).map(variable => variable.replace(/{{|}}/g, ''));
-    const templateVars = {};
-    templateVarsMatches.forEach(match => {
-        if (templateVars[match] == null || typeof templateVars[match] === 'undefined')
-            templateVars[match] = config.params[match];
-    });
-    return templateVars;
-}
-
-function replaceTemplateVars(fileTemplate, templateVars) {
-    if (!fileTemplate) throw Error('File could not be fetched or has no contents.');
-
-    let updatedFile = fileTemplate.slice(0);
-    const dataVariableText = variable => '{{' + variable + '}}';
-    for (let v in templateVars) {
-        const regex = new RegExp(dataVariableText(v), 'g');
-        updatedFile = updatedFile.replace(regex, templateVars[v]);
-    }
-    return updatedFile;
-}
-
-function createDirectories(templateDirectories) {
-    if (!fs.existsSync('./temp')) fs.mkdirSync('./temp');
-
-    templateDirectories.forEach(dir => {
-        if (!fs.existsSync(`./temp/${dir}`)) {
-            fs.mkdirSync(`./temp/${dir}`);
-            console.log(`Created directory './temp/${dir}'`);
-        }
-    });
 }
