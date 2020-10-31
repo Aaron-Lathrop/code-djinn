@@ -1,0 +1,23 @@
+{
+  "name": "code-djinn",
+  "version": "1.0.0",
+  "description": "Easily create custom boiler-plate code for projects like APIs, including testing and swagger if you like, by providing just some json and the template you'd like to use.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aaron-Lathrop/code-djinn.git"
+  },
+  "keywords": [
+    "code-generation",
+    "api"
+  ],
+  "author": "Aaron Lathrop Miller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aaron-Lathrop/code-djinn/issues"
+  },
+  "homepage": "https://github.com/Aaron-Lathrop/code-djinn#readme"
+}
