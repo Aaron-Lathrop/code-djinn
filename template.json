@@ -1,0 +1,23 @@
+[
+    {
+        "template": "./templates/dataServices/template.DataService.txt",
+        "route": "type",
+        "params": {
+            "repo": "typeRepository",
+            "model": "typeModel",
+            "dataService": "typeDataService",
+            "args": "search"
+        }
+    },
+    {
+        "template": "./templates/repositories/template.Repository.txt",
+        "route": "type",
+        "params": {
+            "repo": "typeRepository",
+            "model": "typeModel",
+            "dataService": "typeDataService",
+            "dataSource": "`https://pokeapi.co/api/v2/pokemon/${search}`",
+            "args": "search"
+        }
+    }
+]
