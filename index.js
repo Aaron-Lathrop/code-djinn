@@ -1,3 +1,5 @@
 const { generatefiles } = require("./generatefiles");
+const { setup } = require('./setup');
 
-generatefiles();
+//generatefiles();
+setup('templates', 'temp');
