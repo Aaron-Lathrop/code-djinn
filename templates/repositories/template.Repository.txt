@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-const {{repo}} = async (search) => {
+const {{route}}Repository = async ({{args}}) => {
     const data = axios.get({{dataSource}}, { validateStatus: false });
     return data;
 }
 
 module.exports = {
     fetchData: axios,
-    {{repo}}
+    {{route}}Repository
 };

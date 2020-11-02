@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function setup(templatePath, destinationPath, templateFiles = []) {
+function setup(templatePath, destinationPath, templateMetaData = []) {
     // Add destination path if it doesn't exist already
     createDirectory(path.join(process.cwd(), destinationPath));
 
@@ -12,15 +12,26 @@ function setup(templatePath, destinationPath, templateFiles = []) {
             const tempPath = path.join(templatePath, dirnet.name);
             const fileName = dirnet.name;
             const metaData = createTemplateMetaData(tempPath, fileName, destinationPath);
-            templateFiles.push(metaData);
+            templateMetaData.push(metaData);
         }
         if (dirnet.isDirectory()) {
             // Call method again but one-level deeper
-            setup(path.join(templatePath, dirnet.name), path.join(destinationPath, dirnet.name), templateFiles);
+            setup(path.join(templatePath, dirnet.name), path.join(destinationPath, dirnet.name), templateMetaData);
         }
     });
 
-    return templateFiles;
+    return templateMetaData;
+}
+
+function writeTemplateMetaDataJSONFile(data) {
+    if (data.length > 0) {
+        fs.writeFileSync(path.join(process.cwd(), 'templateMetaData.json'), JSON.stringify(data, null, 2), (err) => { if (err) throw err; })
+        console.log(`Created template meta data file at ${path.join(process.cwd(), 'templateMetaData.json')}`);
+        return path.join(process.cwd(), 'templateMetaData.json');
+    } else {
+        console.error('No data was provided to write the template meta data json file.');
+        return '';
+    }
 }
 
 function createDirectory(dir) {
@@ -58,17 +69,6 @@ function createTemplateMetaData(templateFullPath, templateFileName, destinationP
         rewritable: false,
         params
     };
-}
-
-function writeTemplateMetaDataJSONFile(data) {
-    if (data.length > 0) {
-        fs.writeFileSync(path.join(process.cwd(), 'templateMetaData.json'), JSON.stringify(data, null, 2), (err) => { if (err) throw err; })
-        console.log(`Created template meta data file at ${path.join(process.cwd(), 'templateMetaData.json')}`);
-        return path.join(process.cwd(), 'templateMetaData.json');
-    } else {
-        console.error('No data was provided to write the template meta data json file.');
-        return '';
-    }
 }
 
 exports.setup = setup;
