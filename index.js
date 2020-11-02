@@ -1,5 +1,7 @@
 const { generatefiles } = require("./generatefiles");
 const { setup } = require('./setup');
+const { writeTemplateMetaDataJSONFile } = require('./setup');
 
 //generatefiles();
-setup('templates', 'temp');
+const templateFiles = setup('templates', 'temp');
+const metaDataFilePath = writeTemplateMetaDataJSONFile(templateFiles);

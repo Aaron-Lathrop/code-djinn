@@ -1,37 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Want to create a base config json file with:
- *  1. templatePath
- *  2. templateFileName
- *  3. all params found for each templateFile with default value of null (e.g. force user to fill out with what they want)
- * 
- *  As a user, to build the base for an api that just gets data from another source I should only have to provide:
- *  1. The routes I'd like to have in the api
- *  2. The params for each route (e.g. the url queries and/or the keys in the json POST to the endpoint)
- *  3. The templates (including folder structure) I'd like to have
- * 
- *  Config could look like this when auto-generated (user must fill out details)
- * 
- *  [
- *      {
- *          "route": "type",
- *          "params": "search"
- *      }
- *  ]
- * 
- */
-
 function setup(templatePath, destinationPath, templateFiles = []) {
     // Add destination path if it doesn't exist already
     createDirectory(path.join(process.cwd(), destinationPath));
 
     // Recursively add all sub-folders
     const files = readDirSync(path.join(process.cwd(), templatePath));
-    files.forEach(dirnet => {
+    files.forEach((dirnet, i) => {
         if (dirnet.isFile()) {
-            const metaData = createTemplateMetaData(path.join(templatePath, dirnet.name), dirnet.name);
+            const tempPath = path.join(templatePath, dirnet.name);
+            const fileName = dirnet.name;
+            const metaData = createTemplateMetaData(tempPath, fileName, destinationPath);
             templateFiles.push(metaData);
         }
         if (dirnet.isDirectory()) {
@@ -40,12 +20,8 @@ function setup(templatePath, destinationPath, templateFiles = []) {
         }
     });
 
-    writeTemplateMetaDataJSONFile(templateFiles);
-
     return templateFiles;
 }
-
-exports.setup = setup;
 
 function createDirectory(dir) {
     if (!fs.existsSync(dir)) {
@@ -72,12 +48,14 @@ function getTemplateParams(cleanedTemplateVars) {
     return templateParams;
 }
 
-function createTemplateMetaData(templateFullPath, templateFileName) {
+function createTemplateMetaData(templateFullPath, templateFileName, destinationPath) {
     const cleanedTemplateVars = getCleanedTemplateVars(templateFullPath);
     const params = getTemplateParams(cleanedTemplateVars);
     return {
+        destinationPath,
         templateFullPath,
         templateFileName,
+        rewritable: false,
         params
     };
 }
@@ -85,5 +63,13 @@ function createTemplateMetaData(templateFullPath, templateFileName) {
 function writeTemplateMetaDataJSONFile(data) {
     if (data.length > 0) {
         fs.writeFileSync(path.join(process.cwd(), 'templateMetaData.json'), JSON.stringify(data, null, 2), (err) => { if (err) throw err; })
+        console.log(`Created template meta data file at ${path.join(process.cwd(), 'templateMetaData.json')}`);
+        return path.join(process.cwd(), 'templateMetaData.json');
+    } else {
+        console.error('No data was provided to write the template meta data json file.');
+        return '';
     }
 }
+
+exports.setup = setup;
+exports.writeTemplateMetaDataJSONFile = writeTemplateMetaDataJSONFile;
