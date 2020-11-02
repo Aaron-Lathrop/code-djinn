@@ -1,6 +1,6 @@
-// Source: https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+const logWithColor = (color, message) => console.log(`${color}%s\x1b[0m`, message);
 
-module.exports.colors = {
+const colors = {
     Reset: "\x1b[0m",
     Bright: "\x1b[1m",
     Dim: "\x1b[2m",
@@ -26,4 +26,9 @@ module.exports.colors = {
     BgMagenta: "\x1b[45m",
     BgCyan: "\x1b[46m",
     BgWhite: "\x1b[47m"
+};
+
+module.exports = {
+    colors,
+    logWithColor
 }
