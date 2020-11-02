@@ -2,20 +2,40 @@ const { generatefiles } = require("./generatefiles");
 const { setup } = require('./setup');
 const { writeTemplateMetaDataJSONFile } = require('./setup');
 const readline = require('readline');
+const { rejects } = require("assert");
 
+// Questions
+// https://nodejs.org/api/readline.html
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
-//generatefiles();
-const templateMetaData = setup('templates', 'temp');
-const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
-
-rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer) => {
-    console.log(`Thank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
-    rl.close();
+const routesQuestion = () => new Promise((resolve, reject) => {
+    rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer) => {
+        console.log(`Thank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
+        // Add logic to write the json file
+        // console.log to tell user where the json file is
+        resolve();
+    });
+    
 });
+
+const main = async () => {
+    const closeReader = () => {
+        rl.close();
+        rl.removeAllListeners();
+    }
+
+    console.log('Initizaling code-djinn setup...\n');
+    //generatefiles();
+    const templateMetaData = setup('templates', 'temp');
+    const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
+
+    console.log('\n');
+    await routesQuestion();
+    closeReader();
+};
+main();
 
 /**
  * Need a function where I can just pass a list of route names and be give a JSON file
