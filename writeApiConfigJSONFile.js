@@ -11,6 +11,7 @@ function writeApiConfigJSONFile(routes) {
         Object.keys(current).forEach(key =>{ if (typeof acc[key] === 'undefined') acc[key] = "" })
         return acc;
     }, {});
+    const templates = templateMetaData.map(template => template.templateFileName);
 
     const apiConfig = routes.map(route => {
         const params = deepCopyObject(allTemplateParams);
@@ -18,6 +19,7 @@ function writeApiConfigJSONFile(routes) {
             params['route'] = route;
         return {
             route,
+            templates,
             params
         };
     });

@@ -1,6 +1,14 @@
 [
   {
     "route": "pokemon",
+    "templates": [
+      "template.DataService.txt",
+      "template.Model.txt",
+      "template.Repository.txt",
+      "template.DataService.test.txt",
+      "template.Model.test.txt",
+      "template.Repository.test.txt"
+    ],
     "params": {
       "route": "pokemon",
       "args": "",
@@ -9,6 +17,14 @@
   },
   {
     "route": "type",
+    "templates": [
+      "template.DataService.txt",
+      "template.Model.txt",
+      "template.Repository.txt",
+      "template.DataService.test.txt",
+      "template.Model.test.txt",
+      "template.Repository.test.txt"
+    ],
     "params": {
       "route": "type",
       "args": "",
@@ -17,6 +33,14 @@
   },
   {
     "route": "ability",
+    "templates": [
+      "template.DataService.txt",
+      "template.Model.txt",
+      "template.Repository.txt",
+      "template.DataService.test.txt",
+      "template.Model.test.txt",
+      "template.Repository.test.txt"
+    ],
     "params": {
       "route": "ability",
       "args": "",
@@ -24,25 +48,33 @@
     }
   },
   {
-    "route": "games",
+    "route": "gyms",
+    "templates": [
+      "template.DataService.txt",
+      "template.Model.txt",
+      "template.Repository.txt",
+      "template.DataService.test.txt",
+      "template.Model.test.txt",
+      "template.Repository.test.txt"
+    ],
     "params": {
-      "route": "games",
+      "route": "gyms",
       "args": "",
       "dataSource": ""
     }
   },
   {
     "route": "trainers",
+    "templates": [
+      "template.DataService.txt",
+      "template.Model.txt",
+      "template.Repository.txt",
+      "template.DataService.test.txt",
+      "template.Model.test.txt",
+      "template.Repository.test.txt"
+    ],
     "params": {
       "route": "trainers",
-      "args": "",
-      "dataSource": ""
-    }
-  },
-  {
-    "route": "gyms",
-    "params": {
-      "route": "gyms",
       "args": "",
       "dataSource": ""
     }
