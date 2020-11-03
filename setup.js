@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { writeTemplateMetaDataJSONFile } = require("./writeFiles/writeTemplateMetaDataJSONFile");
+const { colors, logWithColor } = require('./utils/consoleUtils');
 
 function setup(templatePath, destinationPath, templateMetaData = []) {
     // Add destination path if it doesn't exist already
@@ -8,7 +8,7 @@ function setup(templatePath, destinationPath, templateMetaData = []) {
 
     // Recursively add all sub-folders
     const files = readDirSync(path.join(process.cwd(), templatePath));
-    files.forEach((dirnet, i) => {
+    files.forEach((dirnet) => {
         if (dirnet.isFile()) {
             const tempPath = path.join(templatePath, dirnet.name);
             const fileName = dirnet.name;
@@ -28,6 +28,7 @@ function setup(templatePath, destinationPath, templateMetaData = []) {
 function createDirectory(dir) {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
+        logWithColor(colors.FgCyan, `Created new directory at ${dir}`);
     }
 }
 
@@ -63,4 +64,3 @@ function createTemplateMetaData(templateFullPath, templateFileName, destinationP
 }
 
 exports.setup = setup;
-exports.writeTemplateMetaDataJSONFile = writeTemplateMetaDataJSONFile;

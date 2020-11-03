@@ -1,10 +1,9 @@
 const { generatefiles } = require("./generatefiles");
 const { setup } = require('./setup');
-const { writeTemplateMetaDataJSONFile } = require('./setup');
 const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
 const { writeApiConfigJSONFile } = require("./writeFiles/writeApiConfigJSONFile");
-const { rejects } = require("assert");
+const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMetaDataJSONFile');
 
 // Questions
 // https://nodejs.org/api/readline.html
@@ -19,8 +18,8 @@ const closeReader = () => {
 
 const routesQuestion = () => new Promise((resolve, reject) => {
     try {
-        rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
-            console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
+        rl.question('\nWhat routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
+            console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes:\n[${answer}]`);
             const routes = answer.split(',').map(route => route.replace(',', '').trim());
             resolve(routes);
         });
@@ -30,16 +29,20 @@ const routesQuestion = () => new Promise((resolve, reject) => {
 });
 
 const main = async () => {
-    logWithColor(colors.FgCyan, 'Initizaling code-djinn setup...\n');
-    //generatefiles();
-    const templateMetaData = setup('templates', 'temp');
-    const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
-    console.log('\n');
-    const routes = await routesQuestion();
-    const apiConfigFilePath = writeApiConfigJSONFile(routes);
-    closeReader();
+    try {
+        logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
+        //generatefiles();
+        const templateMetaData = setup('templates', 'temp');
+        const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
+        const routes = await routesQuestion();
+        const apiConfigFilePath = writeApiConfigJSONFile(routes);
 
-    logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your api!');
+    } catch (err) {
+        logWithColor(colors.FgRed, err);
+    } finally {
+        closeReader();
+        logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your api!');
+    }
 };
 main();
 
