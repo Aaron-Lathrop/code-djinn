@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { writeTemplateMetaDataJSONFile } = require("./writeFiles/writeTemplateMetaDataJSONFile");
 
 function setup(templatePath, destinationPath, templateMetaData = []) {
     // Add destination path if it doesn't exist already
@@ -23,16 +24,6 @@ function setup(templatePath, destinationPath, templateMetaData = []) {
     return templateMetaData;
 }
 
-function writeTemplateMetaDataJSONFile(data) {
-    if (data.length > 0) {
-        fs.writeFileSync(path.join(process.cwd(), 'templateMetaData.json'), JSON.stringify(data, null, 2), (err) => { if (err) throw err; })
-        console.log(`Created template meta data file at ${path.join(process.cwd(), 'templateMetaData.json')}`);
-        return path.join(process.cwd(), 'templateMetaData.json');
-    } else {
-        console.error('No data was provided to write the template meta data json file.');
-        return '';
-    }
-}
 
 function createDirectory(dir) {
     if (!fs.existsSync(dir)) {

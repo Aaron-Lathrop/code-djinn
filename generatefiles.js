@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const { createDirectories } = require("./createDirectories");
-const { getConfig } = require("./getConfig");
-const { getDirectoriesFromTemplate }  = require('./getDirectoriesFromTemplate');
-const { getProcessVars } = require("./getProcessVars");
-const { getTemplateVars } = require("./getTemplateVars");
-const { replaceTemplateVars } = require("./replaceTemplateVars");
+const { getConfig } = require("./utils/environment/getConfig");
+const { getDirectoriesFromTemplate }  = require('./utils/template/getDirectoriesFromTemplate');
+const { getProcessVars } = require("./utils/environment/getProcessVars");
+const { getTemplateVars } = require("./utils/template/getTemplateVars");
+const { replaceTemplateVars } = require("./utils/template/replaceTemplateVars");
 
 /**
  * Ultimately, I want to recreate the folder structure in the /templates directory

@@ -1,8 +1,8 @@
 const repo = require('../repositories/{{route}}Repository');
 const model = require('../models/{{route}}Model');
 
-const {{route}}DataService = async ({{args}}) => {
-    const data = await repo.{{route}}Repository({{args}});
+const {{route}}DataService = async ({{inputs}}) => {
+    const data = await repo.{{route}}Repository({{inputs}});
     return model.{{route}}Model(data);
 }
 

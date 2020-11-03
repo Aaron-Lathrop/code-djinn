@@ -1,82 +1,94 @@
-[
-  {
-    "route": "pokemon",
-    "templates": [
-      "template.DataService.txt",
-      "template.Model.txt",
-      "template.Repository.txt",
-      "template.DataService.test.txt",
-      "template.Model.test.txt",
-      "template.Repository.test.txt"
-    ],
-    "params": {
-      "route": "pokemon",
-      "args": "",
-      "dataSource": ""
-    }
-  },
-  {
-    "route": "type",
-    "templates": [
-      "template.DataService.txt",
-      "template.Model.txt",
-      "template.Repository.txt",
-      "template.DataService.test.txt",
-      "template.Model.test.txt",
-      "template.Repository.test.txt"
-    ],
-    "params": {
-      "route": "type",
-      "args": "",
-      "dataSource": ""
-    }
-  },
-  {
-    "route": "ability",
-    "templates": [
-      "template.DataService.txt",
-      "template.Model.txt",
-      "template.Repository.txt",
-      "template.DataService.test.txt",
-      "template.Model.test.txt",
-      "template.Repository.test.txt"
-    ],
-    "params": {
-      "route": "ability",
-      "args": "",
-      "dataSource": ""
-    }
-  },
-  {
-    "route": "gyms",
-    "templates": [
-      "template.DataService.txt",
-      "template.Model.txt",
-      "template.Repository.txt",
-      "template.DataService.test.txt",
-      "template.Model.test.txt",
-      "template.Repository.test.txt"
-    ],
-    "params": {
-      "route": "gyms",
-      "args": "",
-      "dataSource": ""
-    }
-  },
-  {
-    "route": "trainers",
-    "templates": [
-      "template.DataService.txt",
-      "template.Model.txt",
-      "template.Repository.txt",
-      "template.DataService.test.txt",
-      "template.Model.test.txt",
-      "template.Repository.test.txt"
-    ],
-    "params": {
-      "route": "trainers",
-      "args": "",
-      "dataSource": ""
+{
+  "routes": {
+    "pokemon": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "pokemon",
+        "inputs": "",
+        "dataSource": ""
+      }
+    },
+    "type": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "type",
+        "inputs": "",
+        "dataSource": ""
+      }
+    },
+    "ability": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "ability",
+        "inputs": "",
+        "dataSource": ""
+      }
+    },
+    "gyms": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "gyms",
+        "inputs": "",
+        "dataSource": ""
+      }
+    },
+    "trainers": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "trainers",
+        "inputs": "",
+        "dataSource": ""
+      }
+    },
+    "locations": {
+      "templates": [
+        "template.DataService.txt",
+        "template.Model.txt",
+        "template.Repository.txt",
+        "template.DataService.test.txt",
+        "template.Model.test.txt",
+        "template.Repository.test.txt"
+      ],
+      "params": {
+        "route": "locations",
+        "inputs": "",
+        "dataSource": ""
+      }
     }
   }
-]
+}

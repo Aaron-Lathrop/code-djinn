@@ -6,7 +6,7 @@
     "rewritable": false,
     "params": {
       "route": "",
-      "args": ""
+      "inputs": ""
     }
   },
   {
@@ -25,7 +25,7 @@
     "rewritable": false,
     "params": {
       "route": "",
-      "args": "",
+      "inputs": "",
       "dataSource": ""
     }
   },

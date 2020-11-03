@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const { deepCopyObject, prettyPrintJSON } = require('./utils/utils')
-const { colors, logWithColor } = require('./utils/consoleUtils');
-const templateMetaData = require('./templateMetaData.json') || [];
+const { deepCopyObject, prettyPrintJSON } = require('../utils/utils')
+const { colors, logWithColor } = require('../utils/consoleUtils');
+const templateMetaData = require('../templateMetaData.json') || [];
 
 function writeApiConfigJSONFile(routes) {
-    logWithColor(colors.FgCyan, routes);
     // Build object to convert to JSON
     const allTemplateParams = templateMetaData.map(template => template.params).reduce((acc, current) => {
         Object.keys(current).forEach(key =>{ if (typeof acc[key] === 'undefined') acc[key] = "" })
@@ -13,22 +12,23 @@ function writeApiConfigJSONFile(routes) {
     }, {});
     const templates = templateMetaData.map(template => template.templateFileName);
 
-    const apiConfig = routes.map(route => {
+    const jsonRoutes = {};
+    const apiConfig = routes.forEach(route => {
         const params = deepCopyObject(allTemplateParams);
-        if (typeof allTemplateParams['route'] !== 'undefined')
+        if (typeof allTemplateParams['route'] !== 'undefined') {
             params['route'] = route;
-        return {
-            route,
+        }
+        jsonRoutes[route] = {
             templates,
             params
-        };
+        }
     });
 
     // Write file to disk
-    fs.writeFileSync(path.join(process.cwd(), 'apiConfig.json'), prettyPrintJSON(apiConfig), (err) => {
+    fs.writeFileSync(path.join(process.cwd(), 'apiConfig.json'), prettyPrintJSON({ routes: jsonRoutes }), (err) => {
         if (err) throw err;
-        logWithColor(colors.FgCyan, `Created api configuration file at ${path.join(process.cwd(), 'apiConfig.json')}`)
     });
+    logWithColor(colors.FgCyan, `\nCreated api configuration file at ${path.join(process.cwd(), 'apiConfig.json')}`)
 
     return apiConfig;
 }

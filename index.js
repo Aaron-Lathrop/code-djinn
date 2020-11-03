@@ -3,7 +3,7 @@ const { setup } = require('./setup');
 const { writeTemplateMetaDataJSONFile } = require('./setup');
 const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
-const { writeApiConfigJSONFile } = require("./writeApiConfigJSONFile");
+const { writeApiConfigJSONFile } = require("./writeFiles/writeApiConfigJSONFile");
 
 // Questions
 // https://nodejs.org/api/readline.html
@@ -14,7 +14,7 @@ const rl = readline.createInterface({
 
 const routesQuestion = () => new Promise((resolve, reject) => {
     rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
-        console.log(`Thank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
+        console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
         // Add logic to write the json file
         const routes = answer.split(',').map(route => route.replace(',', '').trim());
         writeApiConfigJSONFile(routes);
