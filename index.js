@@ -4,6 +4,7 @@ const { writeTemplateMetaDataJSONFile } = require('./setup');
 const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
 const { writeApiConfigJSONFile } = require("./writeFiles/writeApiConfigJSONFile");
+const { rejects } = require("assert");
 
 // Questions
 // https://nodejs.org/api/readline.html
@@ -11,31 +12,31 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+const closeReader = () => {
+    rl.close();
+    rl.removeAllListeners();
+};
 
 const routesQuestion = () => new Promise((resolve, reject) => {
-    rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
-        console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
-        // Add logic to write the json file
-        const routes = answer.split(',').map(route => route.replace(',', '').trim());
-        writeApiConfigJSONFile(routes);
-        // console.log to tell user where the json file is
-        resolve();
-    });
+    try {
+        rl.question('What routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
+            console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes: ${answer}.`);
+            const routes = answer.split(',').map(route => route.replace(',', '').trim());
+            resolve(routes);
+        });
+    } catch (err) {
+        reject(err);
+    }
 });
 
 const main = async () => {
-    const closeReader = () => {
-        rl.close();
-        rl.removeAllListeners();
-    }
-
     logWithColor(colors.FgCyan, 'Initizaling code-djinn setup...\n');
     //generatefiles();
     const templateMetaData = setup('templates', 'temp');
     const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
-
     console.log('\n');
-    await routesQuestion();
+    const routes = await routesQuestion();
+    writeApiConfigJSONFile(routes);
     closeReader();
 
     logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your api!');
