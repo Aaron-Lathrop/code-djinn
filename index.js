@@ -36,7 +36,7 @@ const main = async () => {
     const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
     console.log('\n');
     const routes = await routesQuestion();
-    writeApiConfigJSONFile(routes);
+    const apiConfigFilePath = writeApiConfigJSONFile(routes);
     closeReader();
 
     logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your api!');

@@ -25,11 +25,12 @@ function writeApiConfigJSONFile(routes) {
     });
 
     // Write file to disk
-    fs.writeFileSync(path.join(process.cwd(), 'apiConfig.json'), prettyPrintJSON({ routes: jsonRoutes }), (err) => {
+    const filePath = path.join(process.cwd(), 'apiConfig.json');
+    fs.writeFileSync(filePath, prettyPrintJSON({ routes: jsonRoutes }), (err) => {
         if (err) throw err;
     });
-    logWithColor(colors.FgCyan, `\nCreated api configuration file at ${path.join(process.cwd(), 'apiConfig.json')}`)
+    logWithColor(colors.FgCyan, `\nCreated api configuration file at ${filePath}`)
 
-    return apiConfig;
+    return filePath;
 }
 exports.writeApiConfigJSONFile = writeApiConfigJSONFile;
