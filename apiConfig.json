@@ -11,8 +11,8 @@
       ],
       "params": {
         "route": "pokemon",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "pokemonInputs",
+        "dataSource": "pokemonData"
       }
     },
     "type": {
@@ -26,8 +26,8 @@
       ],
       "params": {
         "route": "type",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "typeInputs",
+        "dataSource": "typeData"
       }
     },
     "ability": {
@@ -41,8 +41,8 @@
       ],
       "params": {
         "route": "ability",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "abilityInputs",
+        "dataSource": "abilityData"
       }
     },
     "gyms": {
@@ -56,8 +56,8 @@
       ],
       "params": {
         "route": "gyms",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "gymsInputs",
+        "dataSource": "gymsData"
       }
     },
     "trainers": {
@@ -71,8 +71,8 @@
       ],
       "params": {
         "route": "trainers",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "trainersInputs",
+        "dataSource": "trainersData"
       }
     },
     "locations": {
@@ -86,8 +86,8 @@
       ],
       "params": {
         "route": "locations",
-        "inputs": "",
-        "dataSource": ""
+        "inputs": "locationsInputs",
+        "dataSource": "locationsData"
       }
     }
   }

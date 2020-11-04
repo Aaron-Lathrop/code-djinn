@@ -4,6 +4,8 @@ const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
 const { writeApiConfigJSONFile } = require("./writeFiles/writeApiConfigJSONFile");
 const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMetaDataJSONFile');
+const fs = require('fs');
+const path = require('path');
 
 // Questions
 // https://nodejs.org/api/readline.html
@@ -35,8 +37,16 @@ const main = async () => {
         const templateMetaData = setup('templates', 'temp');
         const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
         const routes = await routesQuestion();
-        const apiConfigFilePath = writeApiConfigJSONFile(routes);
-
+        
+        // Handle apiConfig.json file creation
+        let apiConfigFilePath = path.join(process.cwd(), 'apiConfig.json');
+        const apiConfigExists = fs.existsSync(apiConfigFilePath);
+        if (apiConfigExists) {
+            logWithColor(colors.FgCyan, `\napiConfig.json already exists at ${apiConfigFilePath}\nskipping file creation...`)
+        } else {
+            apiConfigFilePath = writeApiConfigJSONFile(routes)
+        }
+        generatefiles(metaDataFilePath, apiConfigFilePath);
     } catch (err) {
         logWithColor(colors.FgRed, err);
     } finally {
