@@ -11,8 +11,8 @@
       ],
       "params": {
         "route": "pokemon",
-        "inputs": "pokemonInputs",
-        "dataSource": "pokemonData"
+        "inputs": "",
+        "dataSource": ""
       }
     },
     "type": {
@@ -26,8 +26,8 @@
       ],
       "params": {
         "route": "type",
-        "inputs": "typeInputs",
-        "dataSource": "typeData"
+        "inputs": "",
+        "dataSource": ""
       }
     },
     "ability": {
@@ -41,53 +41,8 @@
       ],
       "params": {
         "route": "ability",
-        "inputs": "abilityInputs",
-        "dataSource": "abilityData"
-      }
-    },
-    "gyms": {
-      "templates": [
-        "template.DataService.txt",
-        "template.Model.txt",
-        "template.Repository.txt",
-        "template.DataService.test.txt",
-        "template.Model.test.txt",
-        "template.Repository.test.txt"
-      ],
-      "params": {
-        "route": "gyms",
-        "inputs": "gymsInputs",
-        "dataSource": "gymsData"
-      }
-    },
-    "trainers": {
-      "templates": [
-        "template.DataService.txt",
-        "template.Model.txt",
-        "template.Repository.txt",
-        "template.DataService.test.txt",
-        "template.Model.test.txt",
-        "template.Repository.test.txt"
-      ],
-      "params": {
-        "route": "trainers",
-        "inputs": "trainersInputs",
-        "dataSource": "trainersData"
-      }
-    },
-    "locations": {
-      "templates": [
-        "template.DataService.txt",
-        "template.Model.txt",
-        "template.Repository.txt",
-        "template.DataService.test.txt",
-        "template.Model.test.txt",
-        "template.Repository.test.txt"
-      ],
-      "params": {
-        "route": "locations",
-        "inputs": "locationsInputs",
-        "dataSource": "locationsData"
+        "inputs": "",
+        "dataSource": ""
       }
     }
   }

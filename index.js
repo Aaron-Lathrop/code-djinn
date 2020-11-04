@@ -1,9 +1,9 @@
-const { generatefiles } = require("./generatefiles");
 const { setup } = require('./setup');
 const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
-const { writeApiConfigJSONFile } = require("./writeFiles/writeApiConfigJSONFile");
+const { writeApiConfigJSONFile } = require('./writeFiles/writeApiConfigJSONFile');
 const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMetaDataJSONFile');
+const { generatefiles } = require("./writeFiles/generatefiles");
 const fs = require('fs');
 const path = require('path');
 
@@ -33,7 +33,6 @@ const routesQuestion = () => new Promise((resolve, reject) => {
 const main = async () => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
-        //generatefiles();
         const templateMetaData = setup('templates', 'temp');
         const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
         const routes = await routesQuestion();

@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const { deepCopyObject, prettyPrintJSON } = require('../utils/utils')
 const { colors, logWithColor } = require('../utils/consoleUtils');
-const templateMetaData = require('../templateMetaData.json') || [];
 
 function writeApiConfigJSONFile(routes) {
     // Build object to convert to JSON
+    const templateMetaData = require('../templateMetaData.json') || [];
     const allTemplateParams = templateMetaData.map(template => template.params).reduce((acc, current) => {
         Object.keys(current).forEach(key =>{ if (typeof acc[key] === 'undefined') acc[key] = "" })
         return acc;
@@ -13,7 +13,7 @@ function writeApiConfigJSONFile(routes) {
     const templates = templateMetaData.map(template => template.templateFileName);
 
     const jsonRoutes = {};
-    const apiConfig = routes.forEach(route => {
+    routes.forEach(route => {
         const params = deepCopyObject(allTemplateParams);
         if (typeof allTemplateParams['route'] !== 'undefined') {
             params['route'] = route;

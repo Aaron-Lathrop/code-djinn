@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const { prettyPrintJSON } = require('./utils/utils');
-const { colors, logWithColor } = require('./utils/consoleUtils');
-const { replaceTemplateVars } = require('./utils/template/replaceTemplateVars');
+const { colors, logWithColor } = require('../utils/consoleUtils');
+const { replaceTemplateVars } = require('../utils/template/replaceTemplateVars');
 
 function generatefiles(metaDataFilePath, apiConfigFilePath) {   
     /**
@@ -25,14 +24,12 @@ function generatefiles(metaDataFilePath, apiConfigFilePath) {
                 fs.writeFileSync(path.join(destinationPath, `${route}.js`), newFileString, (err) => {
                     if (err) throw err;
                 });
-                logWithColor(colors.FgCyan, `\nCreated api configuration file at ${path.join(destinationPath, `${route}.js`)}`)
+                logWithColor(colors.FgCyan, `\nCreated api file at ${path.join(destinationPath, `${route}.js`)}`)
             }
             else {
                 logWithColor(colors.FgRed, "Something went wrong getting the metaDataTemplate.")
             }
         })
     }
-    // logWithColor(colors.FgMagenta, prettyPrintJSON(metaData));
-    // logWithColor(colors.FgMagenta, prettyPrintJSON(apiConfig));
 }
 exports.generatefiles = generatefiles;
