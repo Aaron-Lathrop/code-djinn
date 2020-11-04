@@ -5,7 +5,7 @@ const { colors, logWithColor } = require('../utils/consoleUtils');
 
 function writeApiConfigJSONFile(routes) {
     // Build object to convert to JSON
-    const templateMetaData = require('../templateMetaData.json') || [];
+    const templateMetaData = require('../template-metadata.json') || [];
     const allTemplateParams = templateMetaData.map(template => template.params).reduce((acc, current) => {
         Object.keys(current).forEach(key =>{ if (typeof acc[key] === 'undefined') acc[key] = "" })
         return acc;
@@ -25,7 +25,7 @@ function writeApiConfigJSONFile(routes) {
     });
 
     // Write file to disk
-    const filePath = path.join(process.cwd(), 'apiConfig.json');
+    const filePath = path.join(process.cwd(), 'api-config.json');
     fs.writeFileSync(filePath, prettyPrintJSON({ routes: jsonRoutes }), (err) => {
         if (err) throw err;
     });

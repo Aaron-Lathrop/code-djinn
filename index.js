@@ -37,11 +37,11 @@ const main = async () => {
         const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
         const routes = await routesQuestion();
         
-        // Handle apiConfig.json file creation
-        let apiConfigFilePath = path.join(process.cwd(), 'apiConfig.json');
+        // Handle api-config.json file creation
+        let apiConfigFilePath = path.join(process.cwd(), 'api-config.json');
         const apiConfigExists = fs.existsSync(apiConfigFilePath);
         if (apiConfigExists) {
-            logWithColor(colors.FgCyan, `\napiConfig.json already exists at ${apiConfigFilePath}\nskipping file creation...`)
+            logWithColor(colors.FgCyan, `\napi-config.json already exists at ${apiConfigFilePath}\nskipping file creation...`)
         } else {
             apiConfigFilePath = writeApiConfigJSONFile(routes)
         }

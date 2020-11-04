@@ -4,7 +4,7 @@ const { colors, logWithColor } = require('../utils/consoleUtils');
 
 function writeTemplateMetaDataJSONFile(data) {
     if (data.length > 0) {
-        const filePath = path.join(process.cwd(), 'templateMetaData.json');
+        const filePath = path.join(process.cwd(), 'template-metadata.json');
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2), (err) => {
             if (err)
                 throw err;

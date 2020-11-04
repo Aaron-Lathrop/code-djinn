@@ -5,7 +5,7 @@ const { replaceTemplateVars } = require('../utils/template/replaceTemplateVars')
 
 function generatefiles(metaDataFilePath, apiConfigFilePath) {   
     /**
-     * For each route in apiConfig.json, generate a file with the specified params
+     * For each route in api-config.json, generate a file with the specified params
      * for each template in that route (found in the meta data file)
      */
     const metaData = require(metaDataFilePath);
