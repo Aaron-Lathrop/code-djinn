@@ -24,7 +24,7 @@ function generatefiles(metaDataFilePath, apiConfigFilePath) {
                 fs.writeFileSync(path.join(destinationPath, `${route}.js`), newFileString, (err) => {
                     if (err) throw err;
                 });
-                logWithColor(colors.FgCyan, `\nCreated api file at ${path.join(destinationPath, `${route}.js`)}`)
+                logWithColor(colors.FgCyan, `Created api file at ${path.join(destinationPath, `${route}.js`)}`)
             }
             else {
                 logWithColor(colors.FgRed, "Something went wrong getting the metaDataTemplate.")

@@ -18,6 +18,36 @@ const closeReader = () => {
     rl.removeAllListeners();
 };
 
+const answerYorN = (resolve, answer, tryAgainCallback, ...callbackArgs) => {
+    const response = answer.toLowerCase();
+    switch (response) {
+        case 'y':
+            resolve(true);
+            break;
+        case 'n':
+            resolve(false);
+            break;
+        default:
+            console.log('Invalid input, please select "y" or "n".\n');
+            resolve(tryAgainCallback(...callbackArgs));
+            break;
+    }
+}
+
+const questionYorN = (question, tryAgainCallback, ...callbackArgs) => new Promise((resolve, reject) => {
+    try {
+        rl.question(question + " (Y/n): ", (answer = 'Y') => {
+            answerYorN(resolve, answer, tryAgainCallback, ...callbackArgs);
+        });
+    } catch (err) {
+        reject(err);
+    }
+});
+
+const rewriteFileQuestion = (fileName) => questionYorN(`Rewrite ${fileName}?`, rewriteFileQuestion, fileName);
+const generateFilesQuestion = (metaDataFileName, configFileName, generationPath) =>
+    questionYorN(`Generate files from "${metaDataFileName}" and "${configFileName} to path ${generationPath}?"`, generateFilesQuestion, metaDataFileName, configFileName);
+
 const routesQuestion = () => new Promise((resolve, reject) => {
     try {
         rl.question('\nWhat routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
@@ -33,24 +63,49 @@ const routesQuestion = () => new Promise((resolve, reject) => {
 const main = async () => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
-        const templateMetaData = setup('templates', 'temp');
-        const metaDataFilePath = writeTemplateMetaDataJSONFile(templateMetaData);
-        const routes = await routesQuestion();
+        const fileGenerationDirectory = 'temp';
+        const templatesDirectory = 'templates';
+        // Meta-data
+        const metaDataFileName = 'template-metadata.json'
+        let metaDataFilePath = path.join(process.cwd(), metaDataFileName);
+        const metaDataExists = fs.existsSync(metaDataFilePath);
+        if (metaDataExists) {
+            logWithColor(colors.FgCyan, `\ntemplate-metadata.json already exists at ${metaDataFilePath}\n`);
+            const rewriteMetaData = await rewriteFileQuestion(metaDataFileName);
+            if (rewriteMetaData) {
+                const templateMetaData = setup(templatesDirectory, fileGenerationDirectory);
+                writeTemplateMetaDataJSONFile(metaDataFilePath, templateMetaData);
+            }
+        } else {
+            const templateMetaData = setup(templatesDirectory, fileGenerationDirectory);
+            writeTemplateMetaDataJSONFile(metaDataFilePath, templateMetaData);
+        }
         
         // Handle api-config.json file creation
-        let apiConfigFilePath = path.join(process.cwd(), 'api-config.json');
-        const apiConfigExists = fs.existsSync(apiConfigFilePath);
-        if (apiConfigExists) {
-            logWithColor(colors.FgCyan, `\napi-config.json already exists at ${apiConfigFilePath}\nskipping file creation...`)
+        const apiConfigFileName = 'api-config.json';
+        let apiConfigFilePath = path.join(process.cwd(), apiConfigFileName);
+        const configExists = fs.existsSync(apiConfigFilePath);
+        if (configExists) {
+            logWithColor(colors.FgCyan, `\napi-config.json already exists at ${apiConfigFilePath}\n`)
+            const rewriteApiConfig = await rewriteFileQuestion(apiConfigFileName);
+            if (rewriteApiConfig) {
+                const routes = await routesQuestion();
+                writeApiConfigJSONFile(routes);
+            }
         } else {
-            apiConfigFilePath = writeApiConfigJSONFile(routes)
+            const routes = await routesQuestion();
+            writeApiConfigJSONFile(routes)
         }
-        generatefiles(metaDataFilePath, apiConfigFilePath);
+
+        // Output generated files
+        const rewriteGeneratedFiles = await generateFilesQuestion(metaDataFileName, apiConfigFileName, path.join(process.cwd(), fileGenerationDirectory));
+        if (rewriteGeneratedFiles) generatefiles(metaDataFilePath, apiConfigFilePath);
+
     } catch (err) {
         logWithColor(colors.FgRed, err);
     } finally {
         closeReader();
-        logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your api!');
+        logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your project!');
     }
 };
 main();
