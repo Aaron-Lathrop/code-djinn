@@ -37,7 +37,7 @@ function readDirSync(dir) {
 }
 
 function getCleanedTemplateVars(dir) {
-    const fileTemplate = fs.readFileSync(dir, 'utf-8');
+    const fileTemplate = fs.readFileSync(path.join(process.cwd(), dir), 'utf-8');
     const templateVarsMatches = fileTemplate && fileTemplate.match(/({{\w*}})/g) || [];
     return templateVarsMatches.map(variable => variable.replace(/{{|}}/g, ''));
 }

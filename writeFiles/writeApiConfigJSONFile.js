@@ -3,9 +3,9 @@ const path = require('path');
 const { deepCopyObject, prettyPrintJSON } = require('../utils/utils')
 const { colors, logWithColor } = require('../utils/consoleUtils');
 
-function writeApiConfigJSONFile(routes) {
+function writeApiConfigJSONFile(metaDataFileName, configFileName, routes) {
     // Build object to convert to JSON
-    const templateMetaData = require('../template-metadata.json') || [];
+    const templateMetaData = require(path.join(process.cwd(), metaDataFileName)) || [];
     const allTemplateParams = templateMetaData.map(template => template.params).reduce((acc, current) => {
         Object.keys(current).forEach(key =>{ if (typeof acc[key] === 'undefined') acc[key] = "" })
         return acc;
@@ -25,7 +25,7 @@ function writeApiConfigJSONFile(routes) {
     });
 
     // Write file to disk
-    const filePath = path.join(process.cwd(), 'api-config.json');
+    const filePath = path.join(process.cwd(), configFileName);
     fs.writeFileSync(filePath, prettyPrintJSON({ routes: jsonRoutes }), (err) => {
         if (err) throw err;
     });

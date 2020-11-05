@@ -6,6 +6,7 @@ const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMet
 const { generatefiles } = require("./writeFiles/generatefiles");
 const fs = require('fs');
 const path = require('path');
+const { prettyPrintJSON } = require('./utils/utils');
 
 // Questions
 // https://nodejs.org/api/readline.html
@@ -18,6 +19,15 @@ const closeReader = () => {
     rl.removeAllListeners();
 };
 
+// Questions
+const questionBase = (question, callback, ...args) => new Promise((resolve, reject) => {
+    try {
+        rl.question(question, (answer) => resolve(callback(answer, ...args)))
+    } catch (err) {
+        reject(err);
+    }
+});
+// Yes/No Questions
 const answerYorN = (resolve, answer, tryAgainCallback, ...callbackArgs) => {
     const response = answer.toLowerCase();
     switch (response) {
@@ -48,6 +58,15 @@ const rewriteFileQuestion = (fileName) => questionYorN(`Rewrite ${fileName}?`, r
 const generateFilesQuestion = (metaDataFileName, configFileName, generationPath) =>
     questionYorN(`Generate files from "${metaDataFileName}" and "${configFileName} to path ${generationPath}?"`, generateFilesQuestion, metaDataFileName, configFileName);
 
+// Other questions
+const formatDirectoryAnswer = (answer = '') => answer.replace('\\', '').replace('/', '');
+const formatJsonFileName = (answer = '') => answer.replace(/\.\w*/gi, '') + '.json';
+
+const templateFolderQuestion = () => questionBase('Template folder name (/templates): ', answer => formatDirectoryAnswer(answer));
+const generateFilesFolderQuestion = () => questionBase('Path to generate files to (/temp): ', answer => formatDirectoryAnswer(answer));
+const metaDataFileNameQuestion = () => questionBase('Template metadata config file name (template-metadata): ', answer => formatJsonFileName(answer));
+const configFileNameQuestion = () => questionBase('Generate files config file name (generate-files-config): ', answer => formatJsonFileName(answer));
+
 const routesQuestion = () => new Promise((resolve, reject) => {
     try {
         rl.question('\nWhat routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
@@ -63,12 +82,39 @@ const routesQuestion = () => new Promise((resolve, reject) => {
 const main = async () => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
-        const fileGenerationDirectory = 'temp';
-        const templatesDirectory = 'templates';
+
+        // djinn.config.json file
+        const djinnConfigFileName = 'djinn.config.json';
+        const djinnConfigFilePath = path.join(process.cwd(), djinnConfigFileName);
+        const configFileExists = fs.existsSync(djinnConfigFilePath);
+        if (configFileExists) {
+            logWithColor(colors.FgYellow, 'djinn.config.json exists');
+        } else {
+            logWithColor(colors.FgYellow, `${djinnConfigFileName} does not exist`);
+            logWithColor(colors.FgYellow, `Creating ${djinnConfigFileName} file.`);
+            const templatesDirectory = await templateFolderQuestion();
+            const generateFilesDirectory = await generateFilesFolderQuestion();
+            const metaDataFileName = await metaDataFileNameQuestion();
+            const configFileName = await configFileNameQuestion();
+            const djinConfigData = prettyPrintJSON({
+                templatesDirectory,
+                generateFilesDirectory,
+                metaDataFileName,
+                configFileName
+            });
+            fs.writeFileSync(djinnConfigFilePath, djinConfigData, (err) => { if (err) throw err; });
+            logWithColor(colors.FgCyan, `Created djinn.config.json file at ${djinnConfigFilePath}`);
+        }
+
+        const djinnConfig = require(djinnConfigFilePath);
+
+        const templatesDirectory = djinnConfig.templatesDirectory;
+        const fileGenerationDirectory = djinnConfig.generateFilesDirectory;
+        
         // Meta-data
-        const metaDataFileName = 'template-metadata.json'
+        const metaDataFileName = djinnConfig.metaDataFileName;
         let metaDataFilePath = path.join(process.cwd(), metaDataFileName);
-        const metaDataExists = fs.existsSync(metaDataFilePath);
+        const metaDataExists = fs.existsSync(path.join(process.cwd(), metaDataFilePath));
         if (metaDataExists) {
             logWithColor(colors.FgCyan, `\ntemplate-metadata.json already exists at ${metaDataFilePath}\n`);
             const rewriteMetaData = await rewriteFileQuestion(metaDataFileName);
@@ -82,19 +128,19 @@ const main = async () => {
         }
         
         // Handle api-config.json file creation
-        const apiConfigFileName = 'api-config.json';
+        const apiConfigFileName = djinnConfig.configFileName;
         let apiConfigFilePath = path.join(process.cwd(), apiConfigFileName);
-        const configExists = fs.existsSync(apiConfigFilePath);
-        if (configExists) {
+        const apiConfigExists = fs.existsSync(path.join(process.cwd(), apiConfigFilePath));
+        if (apiConfigExists) {
             logWithColor(colors.FgCyan, `\napi-config.json already exists at ${apiConfigFilePath}\n`)
             const rewriteApiConfig = await rewriteFileQuestion(apiConfigFileName);
             if (rewriteApiConfig) {
                 const routes = await routesQuestion();
-                writeApiConfigJSONFile(routes);
+                writeApiConfigJSONFile(metaDataFileName, apiConfigFileName, routes);
             }
         } else {
             const routes = await routesQuestion();
-            writeApiConfigJSONFile(routes)
+            writeApiConfigJSONFile(metaDataFileName, apiConfigFileName, routes)
         }
 
         // Output generated files
