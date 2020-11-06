@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const { setup } = require('./lib/setup');
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 
 const createDjinnConfig = require('./lib/writeFiles/createDjinnConfig');
-const { writeTemplateMetaDataJSONFile } = require('./lib/writeFiles/writeTemplateMetaDataJSONFile');
+const createMetadata = require('./lib/writeFiles/createMetadata');
 const { writeGenerateFilesConfigJSONFile } = require('./lib/writeFiles/writeGenerateFilesConfigJSONFile');
 const { generateFiles } = require("./lib/writeFiles/generateFiles");
 
@@ -16,27 +15,15 @@ const main = async () => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
 
+        // djinn.config.json
         const djinnConfigFilePath = await createDjinnConfig();
         const djinnConfig = require(djinnConfigFilePath);
 
-        const templatesDirectory = djinnConfig.templatesDirectory;
         const fileGenerationDirectory = djinnConfig.generateFilesDirectory;
-        
-        // Meta-data
         const metaDataFileName = djinnConfig.metaDataFileName;
-        let metaDataFilePath = path.join(process.cwd(), metaDataFileName);
-        const metaDataExists = fs.existsSync(path.join(process.cwd(), metaDataFilePath));
-        if (metaDataExists) {
-            logWithColor(colors.FgCyan, `\ntemplate-metadata.json already exists at ${metaDataFilePath}\n`);
-            const rewriteMetaData = await questions.rewriteFileQuestion(metaDataFileName);
-            if (rewriteMetaData) {
-                const templateMetaData = setup(templatesDirectory, fileGenerationDirectory);
-                writeTemplateMetaDataJSONFile(metaDataFilePath, templateMetaData);
-            }
-        } else {
-            const templateMetaData = setup(templatesDirectory, fileGenerationDirectory);
-            writeTemplateMetaDataJSONFile(metaDataFilePath, templateMetaData);
-        }
+
+        // Meta-data
+        const metaDataFilePath = await createMetadata(djinnConfig);
         
         // Handle api-config.json file creation
         const apiConfigFileName = djinnConfig.configFileName;
@@ -59,7 +46,7 @@ const main = async () => {
         if (rewriteGeneratedFiles) generateFiles(metaDataFilePath, apiConfigFilePath);
 
     } catch (err) {
-        logWithColor(colors.FgRed, err);
+        throw err;
     } finally {
         questionUtils.closeReader();
         logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your project!');
