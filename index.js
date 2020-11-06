@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const { setup } = require('./setup');
-const { prettyPrintJSON } = require('./utils/utils');
-const { colors, logWithColor } = require('./utils/consoleUtils');
+const { setup } = require('./lib/setup');
+const { prettyPrintJSON } = require('./lib/utils/utils');
+const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 
-const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMetaDataJSONFile');
-const { writeGenerateFilesConfigJSONFile } = require('./writeFiles/writeGenerateFilesConfigJSONFile');
-const { generateFiles } = require("./writeFiles/generateFiles");
+const { writeTemplateMetaDataJSONFile } = require('./lib/writeFiles/writeTemplateMetaDataJSONFile');
+const { writeGenerateFilesConfigJSONFile } = require('./lib/writeFiles/writeGenerateFilesConfigJSONFile');
+const { generateFiles } = require("./lib/writeFiles/generateFiles");
 
-const questions = require('./questions/questions');
-const questionUtils = require('./questions/questionUtils');
+const questions = require('./lib/questions/questions');
+const questionUtils = require('./lib/questions/questionUtils');
 
 const main = async () => {
     try {
