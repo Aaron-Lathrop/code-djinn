@@ -1,10 +1,10 @@
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 const questionUtils = require('./lib/questions/questionUtils');
 
-const createDjinnConfig = require('./lib/writeFiles/createDjinnConfig');
-const createMetadata = require('./lib/writeFiles/createMetadata');
-const createGenerateFilesConfig = require('./lib/writeFiles/createGenerateFilesConfig');
-const createGeneratedFiles = require('./lib/writeFiles/createGeneratedFiles');
+const createDjinnConfig = require('./lib/write-files/createDjinnConfig');
+const createMetadata = require('./lib/write-files/createMetadata');
+const createGenerateFilesConfig = require('./lib/write-files/createGenerateFilesConfig');
+const createGeneratedFiles = require('./lib/write-files/createGeneratedFiles');
 
 const main = async () => {
     try {
