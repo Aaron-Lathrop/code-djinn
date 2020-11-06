@@ -1,14 +1,10 @@
-const path = require('path');
-
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
+const questionUtils = require('./lib/questions/questionUtils');
 
 const createDjinnConfig = require('./lib/writeFiles/createDjinnConfig');
 const createMetadata = require('./lib/writeFiles/createMetadata');
 const createGenerateFilesConfig = require('./lib/writeFiles/createGenerateFilesConfig');
-const { generateFiles } = require("./lib/writeFiles/generateFiles");
-
-const questions = require('./lib/questions/questions');
-const questionUtils = require('./lib/questions/questionUtils');
+const createGeneratedFiles = require('./lib/writeFiles/createGeneratedFiles');
 
 const main = async () => {
     try {
@@ -18,12 +14,6 @@ const main = async () => {
         const djinnConfigFilePath = await createDjinnConfig();
         const djinnConfig = require(djinnConfigFilePath);
 
-        const {
-            generateFilesDirectory,
-            metaDataFileName,
-            configFileName
-        } = djinnConfig;
-
         // template-metadata.json
         const metaDataFilePath = await createMetadata(djinnConfig);
         
@@ -31,8 +21,7 @@ const main = async () => {
         const configFilePath = await createGenerateFilesConfig(djinnConfig);
 
         // Output generated files
-        const rewriteGeneratedFiles = await questions.generateFilesQuestion(metaDataFileName, configFileName, path.join(process.cwd(), generateFilesDirectory));
-        if (rewriteGeneratedFiles) generateFiles(metaDataFilePath, configFilePath);
+        await createGeneratedFiles(djinnConfig, metaDataFilePath, configFilePath)
 
     } catch (err) {
         throw err;
