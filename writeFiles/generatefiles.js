@@ -3,15 +3,15 @@ const path = require('path');
 const { colors, logWithColor } = require('../utils/consoleUtils');
 const { replaceTemplateVars } = require('../utils/template/replaceTemplateVars');
 
-function generatefiles(metaDataFilePath, apiConfigFilePath) {   
+function generateFiles(metaDataFilePath, configFilePath) {   
     /**
      * For each route in api-config.json, generate a file with the specified params
      * for each template in that route (found in the meta data file)
      */
     const metaData = require(metaDataFilePath);
-    const apiConfig = require(apiConfigFilePath);
+    const config = require(configFilePath);
 
-    const routes = apiConfig.routes;
+    const routes = config.routes;
 
     for (let route in routes) {
         const { templates, params } = routes[route];
@@ -21,15 +21,17 @@ function generatefiles(metaDataFilePath, apiConfigFilePath) {
                 const { destinationPath, templateFullPath } = metaDataTemplate;
                 const fileTemplate = fs.readFileSync(templateFullPath, 'utf-8') || '';
                 const newFileString = replaceTemplateVars(fileTemplate, params);
+                
+                // Write file
                 fs.writeFileSync(path.join(destinationPath, `${route}.js`), newFileString, (err) => {
                     if (err) throw err;
                 });
-                logWithColor(colors.FgCyan, `Created api file at ${path.join(destinationPath, `${route}.js`)}`)
+                logWithColor(colors.FgCyan, `Created ${route}.js at ${path.join(destinationPath, `${route}.js`)}`)
             }
             else {
-                logWithColor(colors.FgRed, "Something went wrong getting the metaDataTemplate.")
+                logWithColor(colors.FgRed, `Something went wrong getting ${metaDataTemplate}.`)
             }
         })
     }
 }
-exports.generatefiles = generatefiles;
+exports.generateFiles = generateFiles;

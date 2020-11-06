@@ -1,9 +1,9 @@
 const { setup } = require('./setup');
 const readline = require('readline');
 const { colors, logWithColor } = require('./utils/consoleUtils');
-const { writeApiConfigJSONFile } = require('./writeFiles/writeApiConfigJSONFile');
+const { writeGenerateFilesConfigJSONFile } = require('./writeFiles/writeGenerateFilesConfigJSONFile');
 const { writeTemplateMetaDataJSONFile } = require('./writeFiles/writeTemplateMetaDataJSONFile');
-const { generatefiles } = require("./writeFiles/generatefiles");
+const { generateFiles } = require("./writeFiles/generateFiles");
 const fs = require('fs');
 const path = require('path');
 const { prettyPrintJSON } = require('./utils/utils');
@@ -20,7 +20,7 @@ const closeReader = () => {
 };
 
 // Questions
-const questionBase = (question, callback, ...args) => new Promise((resolve, reject) => {
+const question = (question, callback, ...args) => new Promise((resolve, reject) => {
     try {
         rl.question(question, (answer) => resolve(callback(answer, ...args)))
     } catch (err) {
@@ -56,28 +56,22 @@ const questionYorN = (question, tryAgainCallback, ...callbackArgs) => new Promis
 
 const rewriteFileQuestion = (fileName) => questionYorN(`Rewrite ${fileName}?`, rewriteFileQuestion, fileName);
 const generateFilesQuestion = (metaDataFileName, configFileName, generationPath) =>
-    questionYorN(`Generate files from "${metaDataFileName}" and "${configFileName} to path ${generationPath}?"`, generateFilesQuestion, metaDataFileName, configFileName);
+    questionYorN(`Generate files from "${metaDataFileName}" and "${configFileName}" to path ${generationPath}?`, generateFilesQuestion, metaDataFileName, configFileName);
 
-// Other questions
+// djinn config questions
 const formatDirectoryAnswer = (answer = '') => answer.replace('\\', '').replace('/', '');
 const formatJsonFileName = (answer = '') => answer.replace(/\.\w*/gi, '') + '.json';
 
-const templateFolderQuestion = () => questionBase('Template folder name (/templates): ', answer => formatDirectoryAnswer(answer));
-const generateFilesFolderQuestion = () => questionBase('Path to generate files to (/temp): ', answer => formatDirectoryAnswer(answer));
-const metaDataFileNameQuestion = () => questionBase('Template metadata config file name (template-metadata): ', answer => formatJsonFileName(answer));
-const configFileNameQuestion = () => questionBase('Generate files config file name (generate-files-config): ', answer => formatJsonFileName(answer));
+const templateFolderQuestion = () => question('Template folder name (/templates): ', answer => formatDirectoryAnswer(answer));
+const generateFilesFolderQuestion = () => question('Path to generate files to (/src): ', answer => formatDirectoryAnswer(answer));
+const metaDataFileNameQuestion = () => question('Template metadata config file name (template-metadata): ', answer => formatJsonFileName(answer));
+const configFileNameQuestion = () => question('Generate files config file name (generate-files-config): ', answer => formatJsonFileName(answer));
 
-const routesQuestion = () => new Promise((resolve, reject) => {
-    try {
-        rl.question('\nWhat routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
-            console.log(`\nThank you, creating json file for you to complete with inputs for each of these routes:\n[${answer}]`);
-            const routes = answer.split(',').map(route => route.replace(',', '').trim());
-            resolve(routes);
+// generate files questions
+const routesQuestion = () => question('\nWhat routes will your api have? (example input - "pokemon, type, ability"): ', (answer = '') => {
+            console.log(`\nCreating json file for you to complete with inputs for each of these routes:\n[${answer}]`);
+            return answer.split(',').map(route => route.replace(',', '').trim());
         });
-    } catch (err) {
-        reject(err);
-    }
-});
 
 const main = async () => {
     try {
@@ -136,16 +130,16 @@ const main = async () => {
             const rewriteApiConfig = await rewriteFileQuestion(apiConfigFileName);
             if (rewriteApiConfig) {
                 const routes = await routesQuestion();
-                writeApiConfigJSONFile(metaDataFileName, apiConfigFileName, routes);
+                writeGenerateFilesConfigJSONFile(metaDataFileName, apiConfigFileName, routes);
             }
         } else {
             const routes = await routesQuestion();
-            writeApiConfigJSONFile(metaDataFileName, apiConfigFileName, routes)
+            writeGenerateFilesConfigJSONFile(metaDataFileName, apiConfigFileName, routes)
         }
 
         // Output generated files
         const rewriteGeneratedFiles = await generateFilesQuestion(metaDataFileName, apiConfigFileName, path.join(process.cwd(), fileGenerationDirectory));
-        if (rewriteGeneratedFiles) generatefiles(metaDataFilePath, apiConfigFilePath);
+        if (rewriteGeneratedFiles) generateFiles(metaDataFilePath, apiConfigFilePath);
 
     } catch (err) {
         logWithColor(colors.FgRed, err);
