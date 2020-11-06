@@ -1,11 +1,10 @@
-const fs = require('fs');
 const path = require('path');
 
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 
 const createDjinnConfig = require('./lib/writeFiles/createDjinnConfig');
 const createMetadata = require('./lib/writeFiles/createMetadata');
-const { writeGenerateFilesConfigJSONFile } = require('./lib/writeFiles/writeGenerateFilesConfigJSONFile');
+const createGenerateFilesConfig = require('./lib/writeFiles/createGenerateFilesConfig');
 const { generateFiles } = require("./lib/writeFiles/generateFiles");
 
 const questions = require('./lib/questions/questions');
@@ -19,31 +18,21 @@ const main = async () => {
         const djinnConfigFilePath = await createDjinnConfig();
         const djinnConfig = require(djinnConfigFilePath);
 
-        const fileGenerationDirectory = djinnConfig.generateFilesDirectory;
-        const metaDataFileName = djinnConfig.metaDataFileName;
+        const {
+            generateFilesDirectory,
+            metaDataFileName,
+            configFileName
+        } = djinnConfig;
 
-        // Meta-data
+        // template-metadata.json
         const metaDataFilePath = await createMetadata(djinnConfig);
         
-        // Handle api-config.json file creation
-        const apiConfigFileName = djinnConfig.configFileName;
-        let apiConfigFilePath = path.join(process.cwd(), apiConfigFileName);
-        const apiConfigExists = fs.existsSync(path.join(process.cwd(), apiConfigFilePath));
-        if (apiConfigExists) {
-            logWithColor(colors.FgCyan, `\napi-config.json already exists at ${apiConfigFilePath}\n`)
-            const rewriteApiConfig = await questions.rewriteFileQuestion(apiConfigFileName);
-            if (rewriteApiConfig) {
-                const routes = await questions.routesQuestion();
-                writeGenerateFilesConfigJSONFile(metaDataFileName, apiConfigFileName, routes);
-            }
-        } else {
-            const routes = await questions.routesQuestion();
-            writeGenerateFilesConfigJSONFile(metaDataFileName, apiConfigFileName, routes)
-        }
+        // generate-files-config.json
+        const configFilePath = await createGenerateFilesConfig(djinnConfig);
 
         // Output generated files
-        const rewriteGeneratedFiles = await questions.generateFilesQuestion(metaDataFileName, apiConfigFileName, path.join(process.cwd(), fileGenerationDirectory));
-        if (rewriteGeneratedFiles) generateFiles(metaDataFilePath, apiConfigFilePath);
+        const rewriteGeneratedFiles = await questions.generateFilesQuestion(metaDataFileName, configFileName, path.join(process.cwd(), generateFilesDirectory));
+        if (rewriteGeneratedFiles) generateFiles(metaDataFilePath, configFilePath);
 
     } catch (err) {
         throw err;
