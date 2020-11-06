@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const { setup } = require('./lib/setup');
-const { prettyPrintJSON } = require('./lib/utils/utils');
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 
+const createDjinnConfig = require('./lib/writeFiles/createDjinnConfig');
 const { writeTemplateMetaDataJSONFile } = require('./lib/writeFiles/writeTemplateMetaDataJSONFile');
 const { writeGenerateFilesConfigJSONFile } = require('./lib/writeFiles/writeGenerateFilesConfigJSONFile');
 const { generateFiles } = require("./lib/writeFiles/generateFiles");
@@ -16,29 +16,7 @@ const main = async () => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
 
-        // djinn.config.json file
-        const djinnConfigFileName = 'djinn.config.json';
-        const djinnConfigFilePath = path.join(process.cwd(), djinnConfigFileName);
-        const configFileExists = fs.existsSync(djinnConfigFilePath);
-        if (configFileExists) {
-            logWithColor(colors.FgYellow, 'djinn.config.json exists');
-        } else {
-            logWithColor(colors.FgYellow, `${djinnConfigFileName} does not exist`);
-            logWithColor(colors.FgYellow, `Creating ${djinnConfigFileName} file.`);
-            const templatesDirectory = await questions.templateFolderQuestion();
-            const generateFilesDirectory = await questions.generateFilesFolderQuestion();
-            const metaDataFileName = await questions.metaDataFileNameQuestion();
-            const configFileName = await questions.configFileNameQuestion();
-            const djinConfigData = prettyPrintJSON({
-                templatesDirectory,
-                generateFilesDirectory,
-                metaDataFileName,
-                configFileName
-            });
-            fs.writeFileSync(djinnConfigFilePath, djinConfigData, (err) => { if (err) throw err; });
-            logWithColor(colors.FgCyan, `Created djinn.config.json file at ${djinnConfigFilePath}`);
-        }
-
+        const djinnConfigFilePath = await createDjinnConfig();
         const djinnConfig = require(djinnConfigFilePath);
 
         const templatesDirectory = djinnConfig.templatesDirectory;
