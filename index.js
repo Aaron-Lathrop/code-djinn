@@ -9,13 +9,12 @@ const createMetadata = require('./lib/write-files/metadata/createMetadata');
 const createGenerateFilesConfig = require('./lib/write-files/generate-files/createGenerateFilesConfig');
 const createGeneratedFiles = require('./lib/write-files/generate-files/createGeneratedFiles');
 
-const args = process.argv;
 
-const main = async (args) => {
+const main = async () => {
     try {
-        logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
-
         const processFlags = getProcessFlags();
+
+        logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
 
         // djinn.config.json
         const djinnConfigFilePath = await createDjinnConfig();
