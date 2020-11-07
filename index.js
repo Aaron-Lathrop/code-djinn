@@ -5,28 +5,18 @@ const questionUtils = require('./lib/questions/questionUtils');
 const { executeCommand } = require('./lib/environment/flagCommands');
 const getProcessFlags = require('./lib/environment/getProcessFlags');
 
-const createDjinnConfig = require('./lib/write-files/djinn-config/createDjinnConfig');
-const createMetadata = require('./lib/write-files/metadata/createMetadata');
-const createGenerateFilesConfig = require('./lib/write-files/generate-files/createGenerateFilesConfig');
-const createGeneratedFiles = require('./lib/write-files/generate-files/createGeneratedFiles');
-
-const { getDjinnEnv } = require('./lib/store/djinnEnvStore');
-
 const main = async () => {
     try {
         const processFlags = getProcessFlags();
         const { longFlag, shortFlags } = processFlags;
         await executeCommand(longFlag.flag, longFlag.argument);
-        shortFlags.forEach(async (f) => await executeCommand(f.flag, f.argument));
-
-        // // Output generated files
-        // await createGeneratedFiles(djinnConfig, metaDataFilePath, configFilePath);
-
+        for (let i = 0; i < shortFlags.length; i++) {
+            await executeCommand(shortFlags[i].flag, shortFlags[i].argument);
+        }
     } catch (err) {
         throw err;
     } finally {
         questionUtils.closeReader();
-        //logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your project!');
     }
 };
 main();
