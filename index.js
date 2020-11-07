@@ -2,8 +2,8 @@
 
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 const questionUtils = require('./lib/questions/questionUtils');
-const { executeCommand } = require('./lib/utils/environment/flagCommands');
-const getProcessFlags = require('./lib/utils/environment/getProcessFlags');
+const { executeCommand } = require('./lib/environment/flagCommands');
+const getProcessFlags = require('./lib/environment/getProcessFlags');
 
 const createDjinnConfig = require('./lib/write-files/djinn-config/createDjinnConfig');
 const createMetadata = require('./lib/write-files/metadata/createMetadata');
@@ -16,29 +16,17 @@ const main = async () => {
     try {
         const processFlags = getProcessFlags();
         const { longFlag, shortFlags } = processFlags;
-        executeCommand(longFlag.flag, longFlag.argument);
-        shortFlags.forEach(f => executeCommand(f.flag, f.argument));
+        await executeCommand(longFlag.flag, longFlag.argument);
+        shortFlags.forEach(async (f) => await executeCommand(f.flag, f.argument));
 
-        logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
-
-        // djinn.config.json
-        const djinnConfigFilePath = await createDjinnConfig();
-        const djinnConfig = require(djinnConfigFilePath);
-
-        // template-metadata.json
-        const metaDataFilePath = await createMetadata(djinnConfig);
-        
-        // generate-files-config.json
-        const configFilePath = await createGenerateFilesConfig(djinnConfig);
-
-        // Output generated files
-        await createGeneratedFiles(djinnConfig, metaDataFilePath, configFilePath)
+        // // Output generated files
+        // await createGeneratedFiles(djinnConfig, metaDataFilePath, configFilePath);
 
     } catch (err) {
         throw err;
     } finally {
         questionUtils.closeReader();
-        logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your project!');
+        //logWithColor(colors.FgGreen, '\nThanks for using code-djinn to start your project!');
     }
 };
 main();
