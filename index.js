@@ -2,6 +2,7 @@
 
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 const questionUtils = require('./lib/questions/questionUtils');
+const { executeCommand } = require('./lib/utils/environment/flagCommands');
 const getProcessFlags = require('./lib/utils/environment/getProcessFlags');
 
 const createDjinnConfig = require('./lib/write-files/djinn-config/createDjinnConfig');
@@ -9,10 +10,14 @@ const createMetadata = require('./lib/write-files/metadata/createMetadata');
 const createGenerateFilesConfig = require('./lib/write-files/generate-files/createGenerateFilesConfig');
 const createGeneratedFiles = require('./lib/write-files/generate-files/createGeneratedFiles');
 
+const { getDjinnEnv } = require('./lib/store/djinnEnvStore');
 
 const main = async () => {
     try {
         const processFlags = getProcessFlags();
+        const { longFlag, shortFlags } = processFlags;
+        executeCommand(longFlag.flag, longFlag.argument);
+        shortFlags.forEach(f => executeCommand(f.flag, f.argument));
 
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
 
