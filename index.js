@@ -1,14 +1,19 @@
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 const questionUtils = require('./lib/questions/questionUtils');
+const getProcessFlags = require('./lib/utils/environment/getProcessFlags');
 
 const createDjinnConfig = require('./lib/write-files/djinn-config/createDjinnConfig');
 const createMetadata = require('./lib/write-files/metadata/createMetadata');
 const createGenerateFilesConfig = require('./lib/write-files/generate-files/createGenerateFilesConfig');
 const createGeneratedFiles = require('./lib/write-files/generate-files/createGeneratedFiles');
 
-const main = async () => {
+const args = process.argv;
+
+const main = async (args) => {
     try {
         logWithColor(colors.FgGreen + colors.Underscore, 'Initizaling code-djinn setup...');
+
+        const processFlags = getProcessFlags();
 
         // djinn.config.json
         const djinnConfigFilePath = await createDjinnConfig();
