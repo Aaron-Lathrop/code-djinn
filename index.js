@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { colors, logWithColor } = require('./lib/utils/consoleUtils');
 const questionUtils = require('./lib/questions/questionUtils');
 const getProcessFlags = require('./lib/utils/environment/getProcessFlags');
