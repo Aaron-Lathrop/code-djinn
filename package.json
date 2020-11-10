@@ -2,9 +2,9 @@
   "name": "code-djinn",
   "version": "1.0.0",
   "description": "Easily create custom boiler-plate code for projects like APIs, including testing and swagger if you like, by providing just some json and the template you'd like to use.",
-  "main": "index.js",
+  "main": "bin/djinn.js",
   "bin": {
-    "djinn": "./index.js"
+    "djinn": "bin/djinn.js"
   },
   "scripts": {
     "dryRun": "node index.js config=template.json dryRun=true",
@@ -15,6 +15,7 @@
     "url": "git+https://github.com/Aaron-Lathrop/code-djinn.git"
   },
   "keywords": [
+    "cli",
     "code-generation",
     "api"
   ],
