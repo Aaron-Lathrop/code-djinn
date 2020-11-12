@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Aaron-Lathrop/code-djinn/issues"
   },
-  "homepage": "https://github.com/Aaron-Lathrop/code-djinn#readme"
+  "homepage": "https://github.com/Aaron-Lathrop/code-djinn#readme",
+  "dependencies": {
+    "configstore": "^5.0.1"
+  }
 }
