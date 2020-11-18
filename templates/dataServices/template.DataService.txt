@@ -1,9 +1,16 @@
-const repo = require('../repositories/{{route}}');
-const model = require('../models/{{route}}');
+<template>
+    const repo = require('../repositories/{{route}}');
+    const model = require('../models/{{route}}');
 
-const {{route}} = async ({{inputs}}) => {
-    const data = await repo({{inputs}});
-    return model(data);
-}
+    const {{route}} = async ({{inputs}}) => {
+        const data = await repo({{inputs}});
+        return model(data);
+    }
 
-module.exports = {{route}};
+    module.exports = {{route}};
+</template>
+
+<script>
+    route += 'DataService';
+    fileName += 'DataService';
+</script>

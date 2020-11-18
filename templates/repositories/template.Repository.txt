@@ -1,8 +1,15 @@
-const axios = require('axios');
+<template>
+    const axios = require('axios');
 
-const {{route}} = async ({{inputs}}) => {
-    const data = axios.get({{dataSource}}, { validateStatus: false });
-    return data;
-}
+    const {{route}} = async ({{inputs}}) => {
+        const data = axios.get({{dataSource}}, { validateStatus: false });
+        return data;
+    }
 
-module.exports = {{route}};
+    module.exports = {{route}};
+</template>
+
+<script>
+    route += 'Repository';
+    fileName += 'Repository';
+</script>

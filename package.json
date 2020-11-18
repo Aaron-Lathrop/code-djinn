@@ -7,6 +7,7 @@
     "djinn": "bin/djinn.js"
   },
   "scripts": {
+    "build": "node lib/builder/djinn-build.js",
     "dryRun": "node index.js config=template.json dryRun=true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
