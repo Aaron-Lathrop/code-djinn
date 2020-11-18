@@ -1,5 +1,5 @@
 <template>
-    const {{route}} = (apiResponse) => {
+    const {{route}}Model = (apiResponse) => {
         let model = {
             // add the specific data points desired from the apiResponse here
             // use default values here in case the apiResponse failed
@@ -14,10 +14,9 @@
         return model;
     }
 
-    module.exports = {{route}};
+    module.exports = {{route}}Model;
 </template>
 
 <script>
-    route += 'Model';
-    fileName += 'Model';
+    fileName = `${fileName}Model.js`;
 </script>
