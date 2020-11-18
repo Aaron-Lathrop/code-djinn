@@ -18,5 +18,5 @@
 </template>
 
 <script>
-    fileName = `${fileName}Model.js`;
+    this.fileName = `${this.fileName}Model.js`;
 </script>

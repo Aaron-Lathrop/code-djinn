@@ -10,5 +10,5 @@
 </template>
 
 <script>
-    fileName = `${route}Repository.js`;
+    this.fileName = `${this.fileName}Repository.js`;
 </script>
