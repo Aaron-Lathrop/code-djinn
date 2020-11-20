@@ -10,5 +10,6 @@
 </template>
 
 <script>
+    if (!this.fileName) this.fileName = this.route;
     this.fileName = `${this.fileName}Repository.js`;
 </script>

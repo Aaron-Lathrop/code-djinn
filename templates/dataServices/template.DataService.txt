@@ -1,15 +1,41 @@
 <template>
-    const repo = require('../repositories/{{route}}Repository');
+    {{additionalRepos}}
+    const {{route}}Repo = require('../repositories/{{route}}Repository');
     const model = require('../models/{{route}}Model');
 
     const {{route}}DataService = async ({{inputs}}) => {
-        const data = await repo({{inputs}});
-        return model(data);
+        {{additionalDataSources}}
+        const data = await {{route}}Repo({{inputs}});
+        return model({{modelInputs}});
     };
 
     module.exports = {{route}}DataService;
 </template>
 
 <script>
-    this.fileName = `${this.fileName}DataService.js`;
+    function setFileName(name) {
+        if (!name) this.fileName = this.route;
+        this.fileName = `${this.fileName}DataService.js`;
+    }
+    setFileName(this.fileName);
+
+    // Set additional repositories
+    if (!this.additionalRepos) this.additionalRepos = '';
+
+    if (Array.isArray(this.additionalRepos)) {
+        this.additionalRepos = this.additionalRepos.map(aR => `const ${aR}Repo = require('../repositories/${aR}Repository');`)
+                                                   .join('\n\t');
+    }
+
+    // Set additional data sources
+    if (!this.additionalDataSources) this.additionalDataSources = '';
+
+    if (Array.isArray(this.additionalDataSources)) {
+        const allDataSources = ['data'].concat(this.additionalDataSources.map(aDS => `${aDS}Data`));
+        this.modelInputs = allDataSources.join(', ');
+        this.additionalDataSources = this.additionalDataSources.map(ds => `const ${ds}Data = await ${ds}Repo(${inputs});`)
+                                                               .join('\n\t');
+    } else {
+        this.modelInputs = 'data';
+    }
 </script>
