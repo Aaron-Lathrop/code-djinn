@@ -4,17 +4,14 @@
   "description": "Easily create custom boiler-plate code for projects like APIs, including testing and swagger if you like, by providing just some json and the template you'd like to use.",
   "main": "bin/djinn.js",
   "scripts": {
-    "build": "node lib/builder/djinn-build.js",
-    "dryRun": "node index.js config=template.json dryRun=true",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node lib/builder/djinn-build.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Aaron-Lathrop/code-djinn.git"
   },
   "keywords": [
-    "code-generation",
-    "api"
+    "code-generation"
   ],
   "author": "Aaron Lathrop Miller",
   "license": "MIT",
