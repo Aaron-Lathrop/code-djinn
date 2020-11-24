@@ -30,7 +30,7 @@ const buildContexts = [
 	},
 	// as many more routes as you'd like to have...
 ];
-const djinn = require("./djinn");
+const djinn = require("code-djinn");
 const builder = djinn();
 const { buildNewFiles, buildDirectoryModuleExports } = builder;
 
