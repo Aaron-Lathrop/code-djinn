@@ -1,12 +1,19 @@
 # code-djinn
 
-Easily create custom boiler-plate code for projects like APIs, including testing if you like, by providing just some json and the templates you'd like to use.
+Easily create custom boiler-plate code for projects like APIs, including testing if you like, by providing json and templates.
+
+Code-djinn is useful when creating code bases with predictable file strcutures. If you're copying & pasting existing files, especially multiple files, and changing the same aspects of each file every time you want to add a feature then code-djinn could be a good solution. An example is creating API routes with data retrieval and testing.
+
+Code-djinn is not useful when writing writing entirely custom files that do not follow a predictable structure. If you're writing a utility library with a bunch of unique one-off files then code-djinn is not a good solution.
+
+## Installation
 
 To install run `npm install code-djinn --save-dev`
 
 ## Example build.js file
 
 ```javascript
+// build.js
 const buildPaths = ["dist/dataservices", "dist/models", "dist/repositories"];
 const { buildContexts } = require("./example-buildContexts");
 const djinn = require("./djinn");
@@ -23,11 +30,60 @@ builder.build({
 		rewriteAll: false,
 	},
 	buildSteps: [
-		// array of functions to be executed asynchronosily, in order. code-djinn provides the below functions, but any additional user-defined functions can be used as well. code-djinn provides access to all of its functions as part of the object created by running `djinn()` above
+		// array of functions to be executed asynchronosily, in order from first to last. code-djinn provides the below functions, but any additional user-defined functions can be used as well. code-djinn provides access to all of its functions as part of the object created by running `djinn()` above
 		buildNewFiles,
 		buildDirectoryModuleExports,
 	],
 });
+```
+
+## Example template file
+
+Additional is complexity added to this example for illustrative purporses. For example you can, define new functions in the `<script>` section, set the output file's fileName, and write additional lines of code to be injected into the `<template>` section.
+
+```javascript
+// template.DataService.txt
+<template>
+// Everything in the <template> section will be transformed into the output file using the context provided to the `builder.build()` call in the above build.js example.
+    {{additionalRepos}}
+    const {{route}}Repo = require('../repositories/{{route}}Repository');
+    const model = require('../models/{{route}}Model');
+
+    const {{route}}DataService = async ({{inputs}}) => {
+        {{additionalDataSources}}
+        const data = await {{route}}Repo({{inputs}});
+        return model({{modelInputs}});
+    };
+
+    module.exports = {{route}}DataService;
+</template>
+
+<script>
+// Everything in the <script> section will be executed as javascript. Properties like `this.fileName` can be added to the context used to generate the file. Properies like `this.inputs` are added to the global scope for the execution context of generating a single file via the "contexts" property in the object being passed to the `builder.build()` call in the above build.js example.
+    function setFileName(name) {
+        if (!name) this.fileName = this.route;
+        this.fileName = `${this.fileName}DataService.js`;
+    }
+    setFileName(this.fileName);
+
+    // Set additional repositories
+    if (!this.additionalRepos) this.additionalRepos = '';
+
+    if (Array.isArray(this.additionalRepos)) {
+        this.additionalRepos = this.additionalRepos.map(aR => `const ${aR}Repo = require('../repositories/${aR}Repository');`).join('\n\t');
+    }
+
+    // Set additional data sources
+    if (!this.additionalDataSources) this.additionalDataSources = '';
+
+    if (Array.isArray(this.additionalDataSources)) {
+        const allDataSources = ['data'].concat(this.additionalDataSources.map(aDS => `${aDS}Data`));
+        this.modelInputs = allDataSources.join(', ');
+        this.additionalDataSources = this.additionalDataSources.map(ds => `const ${ds}Data = await ${ds}Repo(${this.inputs});`).join('\n\t');
+    } else {
+        this.modelInputs = 'data';
+    }
+</script>
 ```
 
 ## Terms
