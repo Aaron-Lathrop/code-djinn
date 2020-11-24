@@ -1,5 +1,3 @@
-const djinn = require('../lib');
-const getProcessFlags = require('../lib/environment/getProcessFlags');
-const flags = getProcessFlags();
-
-djinn(flags);
+module.exports = function djinn() {
+    return require('../lib/builder/djinn-build');
+};
