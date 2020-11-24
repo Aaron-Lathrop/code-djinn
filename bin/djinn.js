@@ -1,3 +1,3 @@
 module.exports = function djinn() {
-    return require('../lib/builder/djinn-build');
+    return require('../lib/djinn-build');
 };

@@ -37,14 +37,14 @@ const { buildNewFiles, buildDirectoryModuleExports } = builder;
 builder.build({
 	contexts: buildContexts, // context used to generate templates
 	paths: buildPaths, // paths to generate directory module exports
-	templateDir: "templates", // location to template directory from root
+	templateDir: "templates", // location to template directory from root (must be at root of project)
 	outputDir: "dist", // location to generated files from root
 	options: {
 		// additional build options, currently only rewriteAll is available
 		rewriteAll: false,
 	},
 	buildSteps: [
-		/* array of functions to be executed asynchronosily, in order from
+		/* array of functions to be executed asynchronously, in order from
 		first to last. code-djinn provides the below functions, but any
 		additional user-defined functions can be used as well. code-djinn
 		provides access to all of its functions as part of the object created
