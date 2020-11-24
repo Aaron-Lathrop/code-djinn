@@ -4,7 +4,7 @@ Easily create custom boiler-plate code for projects like APIs, including testing
 
 Code-djinn is useful when creating code bases with predictable file strcutures. If you're copying & pasting existing files, especially multiple files, and changing the same aspects of each file every time you want to add a feature then code-djinn could be a good solution. An example is creating API routes with data retrieval and testing.
 
-Code-djinn is not useful when writing writing entirely custom files that do not follow a predictable structure. If you're writing a utility library with a bunch of unique one-off files then code-djinn is not a good solution.
+Code-djinn is not useful when writing writing entirely custom files that do not follow a predictable structure. If you're writing a utility library with a bunch of unique one-off files then code-djinn is not a good solution to create those files.
 
 ## Installation
 
@@ -15,7 +15,21 @@ To install run `npm install code-djinn --save-dev`
 ```javascript
 // build.js
 const buildPaths = ["dist/dataservices", "dist/models", "dist/repositories"];
-const { buildContexts } = require("./example-buildContexts");
+const buildContexts = [
+	{
+		route: "comments",
+		inputs: "",
+		dataSource: "`https://jsonplaceholder.typicode.com/comments`",
+		rewritable: false,
+	},
+	{
+		route: "individual",
+		inputs: "search",
+		dataSource: "`https://pokeapi.co/api/v2/pokemon/${search}`",
+		rewritable: false,
+	},
+	// as many more routes as you'd like to have...
+];
 const djinn = require("./djinn");
 const builder = djinn();
 const { buildNewFiles, buildDirectoryModuleExports } = builder;
@@ -30,7 +44,7 @@ builder.build({
 		rewriteAll: false,
 	},
 	buildSteps: [
-		// array of functions to be executed asynchronosily, in order from first to last. code-djinn provides the below functions, but any additional user-defined functions can be used as well. code-djinn provides access to all of its functions as part of the object created by running `djinn()` above
+		/* array of functions to be executed asynchronosily, in order from first to last. code-djinn provides the below functions, but any additional user-defined functions can be used as well. code-djinn provides access to all of its functions as part of the object created by running `djinn()` above */
 		buildNewFiles,
 		buildDirectoryModuleExports,
 	],
@@ -44,7 +58,7 @@ Additional is complexity added to this example for illustrative purporses. For e
 ```javascript
 // template.DataService.txt
 <template>
-// Everything in the <template> section will be transformed into the output file using the context provided to the `builder.build()` call in the above build.js example.
+/* Everything in the <template> section will be transformed into the output file using the context provided to the `builder.build()` call in the above build.js example. */
     {{additionalRepos}}
     const {{route}}Repo = require('../repositories/{{route}}Repository');
     const model = require('../models/{{route}}Model');
@@ -59,7 +73,7 @@ Additional is complexity added to this example for illustrative purporses. For e
 </template>
 
 <script>
-// Everything in the <script> section will be executed as javascript. Properties like `this.fileName` can be added to the context used to generate the file. Properies like `this.inputs` are added to the global scope for the execution context of generating a single file via the "contexts" property in the object being passed to the `builder.build()` call in the above build.js example.
+/* Everything in the <script> section will be executed as javascript. Properties like `this.fileName` can be added to the context used to generate the file. Properies like `this.inputs` are added to the global scope for the execution context of generating a single file via the "contexts" property in the object being passed to the `builder.build()` call in the above build.js example. */
     function setFileName(name) {
         if (!name) this.fileName = this.route;
         this.fileName = `${this.fileName}DataService.js`;
