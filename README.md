@@ -59,12 +59,12 @@ builder.build({
 
 Additional is complexity added to this example for illustrative purporses. For example you can, define new functions in the `<script>` section, set the output file's fileName, and write additional lines of code to be injected into the `<template>` section.
 
-```javascript
+```html
 // template.DataService.txt
 <template>
-/* Everything in the <template> section will be transformed into the output
+<!-- Everything in the <template> section will be transformed into the output
 file using the context provided to the `builder.build()` call in the above
-build.js example. */
+build.js example. -->
     {{additionalRepos}}
     const {{route}}Repo = require('../repositories/{{route}}Repository');
     const model = require('../models/{{route}}Model');
