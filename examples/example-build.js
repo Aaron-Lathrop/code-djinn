@@ -6,15 +6,17 @@ const { buildFile, buildNewFiles, buildDirectoryModuleExports } = builder;
 
 builder.build({
     contexts: buildContexts,
+    moduleExportPaths,
     templateDir: 'example-templates',
     outputDir : 'dist',
     options: {
         rewriteAll: true
     },
     buildSteps: [
-        buildNewFiles(),
-        buildDirectoryModuleExports(moduleExportPaths, 'index.js', false),
+        buildNewFiles,
+        buildDirectoryModuleExports(moduleExportPaths, "index.js", false),
         buildFile('template.App.txt', 'dist', {
+            fileName: 'test-app.js',
             rewritable: true
         })
     ]
