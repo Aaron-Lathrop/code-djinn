@@ -2,7 +2,7 @@ const buildPaths = ['dist/dataservices', 'dist/models', 'dist/repositories'];
 const { buildContexts } = require("./example-buildContexts");
 const djinn = require('../bin/djinn');
 const builder = djinn();
-const { buildNewFiles, buildDirectoryModuleExports } = builder;
+const { buildFile, buildNewFiles, buildDirectoryModuleExports } = builder;
 
 builder.build({
     contexts: buildContexts,
@@ -10,10 +10,13 @@ builder.build({
     templateDir: 'example-templates',
     outputDir : 'dist',
     options: {
-        rewriteAll: true
+        rewriteAll: false
     },
     buildSteps: [
-        buildNewFiles,
-        buildDirectoryModuleExports
+        buildNewFiles(),
+        buildDirectoryModuleExports(),
+        buildFile('template.App.txt', 'dist', {
+            rewritable: true
+        })
     ]
 });
