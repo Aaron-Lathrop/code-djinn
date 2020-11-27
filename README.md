@@ -76,6 +76,13 @@ builder.build({
 
 Additional is complexity added to this example for illustrative purporses. For example you can, define new functions in the `<script>` section, set the output file's fileName, and write additional lines of code to be injected into the `<template>` section.
 
+"$empty" value for template variable
+There are times when you may want to have a template variable that only sometimes
+renders content on a line (e.g. "{{additionalRepos}}", and "{{additionalDataSources}}").
+Using the value "$empty" let's you render these lines when you want to, and leave them
+out when you don't. Not using "$empty" will result in a blank line in the output file.
+"this.Constants.empty" is also provided to help access this value.
+
 ```html
 // template.DataService.txt
 <template>
@@ -102,13 +109,6 @@ the file. Properies like `this.inputs` are added to the global scope for the
 execution context of generating a single file via the "contexts" property in
 the object being passed to the `builder.build()` call in the above build.js
 example. 
-
-"$empty"
-There are times when you may want to have a template variable that only sometimes
-renders content on a line (e.g. "{{additionalRepos}}", and "{{additionalDataSources}}").
-Using the value "$empty" let's you render these lines when you want to, and leave them
-out when you don't. Not using "$empty" will result in a blank line in the output file.
-"this.Constants.empty" is also provided to help access this value.
 */
 	function setFileName(name) {
 		if (!name) this.fileName = this.route;
@@ -139,6 +139,58 @@ out when you don't. Not using "$empty" will result in a blank line in the output
 	} else {
 		this.modelInputs = "data";
 	}
+</script>
+```
+## Example template file using "this.$store"
+Each context automatically gets a variable called "$store" which contains the entire state
+provided in the first argument of builder.build() above. This can be useful if you need
+to update files based on all of the contexts provided and not just the current iteration.
+This is also useful when using buildFile() so that you can have access to the state provided
+which would otherwise not be available.
+
+The example below looks at each context provided in state.contexts and uses the variable "route"
+from it to write the code required to expose the endpoint. This is useful when using code-djinn
+to write code that is fully functional immediately after building.
+
+```html
+// template.App.txt
+<template>
+    const express = require('express');
+    const app = express();
+
+    const ds = require('./dataServices');
+    const cors = require('cors');
+    const middleware = require('./middleware');
+
+    const PORT = process.env.PORT || 3000;
+
+    // Enter process middleware
+    app.disable('x-powered-by');
+
+    app.use(cors());
+
+    for (let m in middleware)
+        app.use((req, res, next) => middleware[m](req, res, next))
+
+    // Routes
+    {{routes}}
+
+    // Start server
+    app.listen(PORT, () => console.log(`app is listening on port: ${PORT}`));
+</template>
+
+<script>
+    if(!this.fileName) this.fileName = `test-app.js`;
+
+    this.routes = this.$store.contexts.map(c => `
+    app.get('/${c.route}', (req, res) => {
+        const { search } = req.query;
+
+        ds.${c.route}DataService(search)
+            .then(json => res.json(json))
+            .catch((err) => console.log(err));
+    });`
+    ).join('\n');
 </script>
 ```
 
