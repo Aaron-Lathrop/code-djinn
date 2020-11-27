@@ -82,12 +82,17 @@ Additional is complexity added to this example for illustrative purporses. For e
 	<!-- Everything in the <template> section will be transformed into the output
 file using the context provided to the `builder.build()` call in the above
 build.js example. -->
-	{{additionalRepos}} const {{route}}Repo =
-	require('../repositories/{{route}}Repository'); const model =
-	require('../models/{{route}}Model'); const {{route}}DataService = async
-	({{inputs}}) => { {{additionalDataSources}} const data = await
-	{{route}}Repo({{inputs}}); return model({{modelInputs}}); }; module.exports =
-	{{route}}DataService;
+	{{additionalRepos}}
+    const {{route}}Repo = require('../repositories/{{route}}Repository');
+    const model = require('../models/{{route}}Model');
+
+    const {{route}}DataService = async ({{inputs}}) => {
+        {{additionalDataSources}}
+        const data = await {{route}}Repo({{inputs}});
+        return model({{modelInputs}});
+    };
+
+    module.exports = {{route}}DataService;
 </template>
 
 <script>
@@ -96,7 +101,15 @@ Properties like `this.fileName` can be added to the context used to generate
 the file. Properies like `this.inputs` are added to the global scope for the
 execution context of generating a single file via the "contexts" property in
 the object being passed to the `builder.build()` call in the above build.js
-example. */
+example. 
+
+"$empty"
+There are times when you may want to have a template variable that only sometimes
+renders content on a line (e.g. "{{additionalRepos}}", and "{{additionalDataSources}}").
+Using the value "$empty" let's you render these lines when you want to, and leave them
+out when you don't. Not using "$empty" will result in a blank line in the output file.
+"this.Constants.empty" is also provided to help access this value.
+*/
 	function setFileName(name) {
 		if (!name) this.fileName = this.route;
 		this.fileName = `${this.fileName}DataService.js`;
@@ -104,18 +117,16 @@ example. */
 	setFileName(this.fileName);
 
 	// Set additional repositories
-	if (!this.additionalRepos) this.additionalRepos = "";
+	if (!this.additionalRepos) this.additionalRepos = "$empty";
 
 	if (Array.isArray(this.additionalRepos)) {
 		this.additionalRepos = this.additionalRepos
-			.map(
-				(aR) => `const ${aR}Repo = require('../repositories/${aR}Repository');`
-			)
+			.map((aR) => `const ${aR}Repo = require('../repositories/${aR}Repository');`)
 			.join("\n\t");
 	}
 
 	// Set additional data sources
-	if (!this.additionalDataSources) this.additionalDataSources = "";
+	if (!this.additionalDataSources) this.additionalDataSources = this.Constants.empty;
 
 	if (Array.isArray(this.additionalDataSources)) {
 		const allDataSources = ["data"].concat(

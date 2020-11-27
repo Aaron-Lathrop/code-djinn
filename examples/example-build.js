@@ -10,7 +10,7 @@ builder.build({
     templateDir: 'example-templates',
     outputDir : 'dist',
     options: {
-        rewriteAll: false
+        rewriteAll: true
     },
     buildSteps: [
         buildNewFiles,
