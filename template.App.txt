@@ -24,14 +24,15 @@
 </template>
 
 <script>
-    this.fileName = `test-app.js`;
+    if(!this.fileName) this.fileName = `test-app.js`;
 
-    this.routes = `
-    app.get('/comments', (req, res) => {
-    const { search } = req.query;
+    this.routes = this.$store.contexts.map(c => `
+    app.get('/${c.route}', (req, res) => {
+        const { search } = req.query;
 
-    ds.commentsDataService(search)
-        .then(json => res.json(json))
-        .catch((err) => console.log(err));
+        ds.${c.route}DataService(search)
+            .then(json => res.json(json))
+            .catch((err) => console.log(err));
     });`
+    ).join('\n\n');
 </script>
