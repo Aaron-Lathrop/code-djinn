@@ -65,7 +65,7 @@ builder.build({
 		*/
 		buildNewFiles(), // or buildNewFiles
 		buildDirectoryModuleExports(moduleExportPaths, "index.js", false), // or buildDirectoryModuleExports
-		buildFile("template.App.txt", "dist", {
+		buildFile("template.App.txt", "./", { // this will build at the root of the project
 			rewritable: true,
 		}),
 	],
