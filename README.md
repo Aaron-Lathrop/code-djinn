@@ -8,7 +8,7 @@ Easily create custom boiler-plate code for projects like APIs, including testing
 
 Code-djinn is useful when creating code bases with predictable file strcutures. If you're copying & pasting existing files, especially multiple files, and changing the same aspects of each file every time you want to add a feature then code-djinn could be a good solution. An example is creating API routes with data retrieval and testing.
 
-Code-djinn is not useful when writing writing entirely custom files that do not follow a predictable structure. If you're writing a utility library with a bunch of unique one-off files then code-djinn is not a good solution to create those files.
+Code-djinn is not useful when writing entirely custom files that do not follow a predictable structure. If you're writing a utility library with a bunch of unique one-off files then code-djinn is not a good solution to create those files.
 
 ## Installation
 
@@ -153,7 +153,7 @@ from it to write the code required to expose the endpoint. This is useful when u
 to write code that is fully functional immediately after building.
 
 ```html
-// template.App.txt
+// template.App.tx
 <template>
     const express = require('express');
     const app = express();
