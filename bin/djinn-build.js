@@ -1,10 +1,10 @@
-const { getTemplateVars, validateContext, getNewFileString } = require("./utils/templateUtils");
-const { stripDoubleQuotes, formatJSON, prettyPrint } = require('./utils/jsonUtils');
-const { deepCopy } = require('./utils/functional');
+const { getTemplateVars, validateContext, getNewFileString } = require("../lib/utils/templateUtils");
+const { stripDoubleQuotes, formatJSON, prettyPrint } = require('../lib/utils/jsonUtils');
+const { curry, deepCopy, pipe } = require('../lib/utils/functional');
 
-const { getFileData, buildFile } = require("./build/file");
-const { getNewFileData, addNewFileData, buildNewFiles } = require("./build/newFiles");
-const { getNodeModuleExports, addNodeModuleExportData, buildDirectoryModuleExports } = require("./build/directoryModuleExports");
+const { getFileData, buildFile } = require("../lib/build/file");
+const { getNewFileData, addNewFileData, buildNewFiles } = require("../lib/build/newFiles");
+const { getNodeModuleExports, addNodeModuleExportData, buildDirectoryModuleExports } = require("../lib/build/directoryModuleExports");
 
 const djinn = exports = module.exports = {};
 
@@ -20,17 +20,19 @@ const djinn = exports = module.exports = {};
             buildSteps: function[]
         }
  */
-djinn.build = require('./build/build');
+djinn.build = require('../lib/build/build');
 
 djinn.validateContext = validateContext;
 djinn.getTemplateVars = getTemplateVars;
 
-djinn.templateUtils = require('./utils/templateUtils');
+djinn.templateUtils = require('../lib/utils/templateUtils');
 
-djinn.fileSystem = require('./utils/fsUtils');
+djinn.fileSystem = require('../lib/utils/fsUtils');
 
 djinn.utils = {
+    curry,
     deepCopy,
+    pipe,
     stripDoubleQuotes,
     prettyPrint,
     formatJSON

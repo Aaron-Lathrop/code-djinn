@@ -71,5 +71,5 @@ module.exports = djinn;
  * See https://github.com/Aaron-Lathrop/code-djinn#readme for more information.
  */
 function djinn() {
-    return require('../lib/djinn-build');
+    return require('./djinn-build');
 };
