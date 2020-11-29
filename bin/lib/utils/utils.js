@@ -6,8 +6,7 @@ const willDeprecate = (deprecationMessage, ...messages) => {
 const willDeprecateState = (state) => {
     const nextStable = 'in the next stable release.';
     const toBeDeprecated = [
-        { key: 'paths', when: nextStable, replacement: 'moduleExportPaths' },
-        { key: 'rewriteAll', when: nextStable, replacement: null }
+        { key: 'paths', when: nextStable, replacement: 'moduleExportPaths' }
     ];
     toBeDeprecated.forEach(item => {
         if (state.hasOwnProperty(item.key)) {
