@@ -13,6 +13,9 @@
 </template>
 
 <script>
+    this.rewritable = false; // never rewrite files made from this template
+    //this.rewritable = true // always rewrite files made from this template
+
     function setFileName(name) {
         if (!name) this.fileName = this.route;
         this.fileName = `${this.fileName}DataService.js`;
