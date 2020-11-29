@@ -1,6 +1,6 @@
 # code-djinn
 
-## Alpha phase of development. Breaking changes can be expected; for experimental use only
+## Beta phase of development. Changes might be expected, but package is a release candidate.
 
 Report issues at https://github.com/Aaron-Lathrop/code-djinn/issues
 
