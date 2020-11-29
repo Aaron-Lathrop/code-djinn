@@ -10,7 +10,9 @@ async function build(buildState) {
     state.contexts = state.options.rewriteAll
         ? contexts.map(c => {
             const contextRewrite = createStore(c, state);
-            contextRewrite.rewritable = true;
+            // Don't override more specific options with more general options
+            if (contextRewrite.hasOwnProperty('rewritable') === false) 
+                contextRewrite.rewritable = true;
             return contextRewrite;
         })
         : contexts.map(c => createStore(c, state));

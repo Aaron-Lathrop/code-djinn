@@ -110,6 +110,13 @@ execution context of generating a single file via the "contexts" property in
 the object being passed to the `builder.build()` call in the above build.js
 example. 
 */
+	
+	/* REWRITABLE: The ability to rewrite a template or not can be set at the
+				   template-level
+	*/
+	this.rewritable = false // never rewrite files from this template
+	//this.rewritable = true // always rewrite files from this template
+
 	function setFileName(name) {
 		if (!name) this.fileName = this.route;
 		this.fileName = `${this.fileName}DataService.js`;
