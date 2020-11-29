@@ -40,7 +40,9 @@ const buildContexts = [
 ];
 const djinn = require("code-djinn");
 const builder = djinn();
-const { buildFile, buildNewFiles, buildDirectoryModuleExports } = builder;
+// Destructuring can be used here, but it will hide intelisense. If this
+// doesn't matter to you then destructuring can be used instead.
+//const { buildFile, buildNewFiles, buildDirectoryModuleExports } = builder;
 
 builder.build({
 	contexts: buildContexts, // context used to generate templates
@@ -63,9 +65,9 @@ builder.build({
 		The 'paths' key is required for buildDirectoryModuleExports if you don't
 		pass it
 		*/
-		buildNewFiles(), // or buildNewFiles
-		buildDirectoryModuleExports(moduleExportPaths, "index.js", false), // or buildDirectoryModuleExports
-		buildFile("template.App.txt", "./", { // this will build at the root of the project
+		builder.buildNewFiles(), // or buildNewFiles
+		builder.buildDirectoryModuleExports(moduleExportPaths, "index.js", false), // or buildDirectoryModuleExports
+		builder.buildFile("template.App.txt", "./", { // this will build at the root of the project
 			rewritable: true,
 		}),
 	],
