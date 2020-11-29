@@ -1,5 +1,5 @@
 const willDeprecate = (deprecationMessage, ...messages) => {
-    console.warn(`\x1b[31m%s\x1b[0m`, `Deprecation notice: ${deprecationMessage}`);
+    console.warn(`\x1b[31m%s\x1b[0m`, `DEPRECATION NOTICE: ${deprecationMessage}`);
     if (messages)
         messages.forEach(message => console.warn(`\x1b[31m%s\x1b[0m`, message));
 };

@@ -68,7 +68,7 @@ module.exports = djinn;
  *          Builds files which contain all of the module exports for each given directory/path. Files are built in the same directory.
  *          
  * 
- * See https://github.com/Aaron-Lathrop/code-djinn#readme for more information.
+ * See https://github.com/Aaron-Lathrop/code-djinn#readme for more information and code & template examples.
  */
 function djinn() {
     return require('./djinn-build');
